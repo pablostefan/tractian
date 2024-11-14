@@ -37,4 +37,7 @@ abstract class AppDimens {
 
   /// xl = 64 |
   static const double xl = 64;
+
+  /// xxl = 76 |
+  static const double xxl = 76;
 }

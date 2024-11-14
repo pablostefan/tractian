@@ -1,11 +1,21 @@
 import 'package:flutter/material.dart';
-import 'package:tractian/shared/typography/font_family.dart';
-import 'package:tractian/shared/typography/typography_font_size.dart';
-import 'package:tractian/shared/typography/typography_font_weight.dart';
-import 'package:tractian/shared/typography/typography_line_height.dart';
 import 'package:tractian/shared/ui/app_colors.dart';
+import 'package:tractian/shared/ui/typography/font_family.dart';
+import 'package:tractian/shared/ui/typography/typography_font_size.dart';
+import 'package:tractian/shared/ui/typography/typography_font_weight.dart';
+import 'package:tractian/shared/ui/typography/typography_line_height.dart';
 
 extension TypographyExtension on Text {
+  Text bodyMediumMedium({TextStyle? style}) {
+    TextStyle defaultStyle = _getTextStyle(
+        fontSize: TypographyFontSize.medium,
+        fontWeight: TypographyFontWeight.medium,
+        height: TypographyLineHeight.body,
+        mergeStyle: style);
+
+    return _getTextTypography(text: this, textStyle: defaultStyle);
+  }
+
   Text bodySmallMedium({TextStyle? style}) {
     TextStyle defaultStyle = _getTextStyle(
         fontSize: TypographyFontSize.small,

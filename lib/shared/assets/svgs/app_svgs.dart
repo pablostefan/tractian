@@ -1,7 +1,7 @@
 enum AppSvgs {
   ic_bolt,
   ic_codepen,
-  ic_companies,
+  ic_company,
   ic_cube,
   ic_ellipse,
   ic_energy,

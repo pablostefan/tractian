@@ -46,5 +46,13 @@ class NetworkFailure extends BaseFailure {
 }
 
 class ExceptionFailure extends BaseFailure {
-  ExceptionFailure({super.stackTrace}) : super(message: 'An unknown error occurred');
+  ExceptionFailure({super.stackTrace, required super.message});
+
+  factory ExceptionFailure.fromException(Exception e, StackTrace? stackTrace) {
+    return ExceptionFailure(message: e.toString(), stackTrace: stackTrace);
+  }
+}
+
+class UnknownFailure extends BaseFailure {
+  UnknownFailure({super.stackTrace}) : super(message: 'An unknown error occurred');
 }
