@@ -4,7 +4,7 @@ import 'package:tractian/features/assets/domain/entities/tree_node.dart';
 
 class TreeBuilder {
   /// Constrói a árvore a partir de listas de [LocationEntity] e [AssetEntity]
-  static List<TreeNode> buildTree(
+  static List<TreeNode> build(
     List<LocationEntity> locations,
     List<AssetEntity> assets,
   ) {

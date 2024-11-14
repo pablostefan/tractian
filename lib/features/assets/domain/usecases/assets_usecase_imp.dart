@@ -26,7 +26,7 @@ class AssetsUseCaseImp extends BaseRepository implements AssetsUseCase {
       var assets = await _assetsRepository.getAssets(companyId);
       assets.fold((error) => throw error, (r) => assetsList = r);
 
-      response = TreeBuilder.buildTree(locationsList, assetsList);
+      response = TreeBuilder.build(locationsList, assetsList);
 
       return response;
     });
