@@ -56,3 +56,7 @@ class ExceptionFailure extends BaseFailure {
 class UnknownFailure extends BaseFailure {
   UnknownFailure({super.stackTrace}) : super(message: 'An unknown error occurred');
 }
+
+class UseCaseFailure extends BaseFailure {
+  UseCaseFailure({required super.message, super.stackTrace});
+}
