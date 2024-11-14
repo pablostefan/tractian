@@ -1,5 +1,5 @@
 import 'package:go_router/go_router.dart';
-import 'package:tractian/core/routes/route_name.dart';
+import 'package:tractian/core/routes/app_route.dart';
 
 abstract class AppRoutes {
   static final router = GoRouter(initialLocation: AppRoute.menu.path, routes: [

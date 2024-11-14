@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:oktoast/oktoast.dart';
+import 'package:tractian/core/injection/injection.dart';
+import 'package:tractian/core/routes/app_routes.dart';
+import 'package:tractian/shared/ui/app_colors.dart';
 
 class AppWidget extends StatefulWidget {
   const AppWidget({super.key});
@@ -25,7 +28,9 @@ class _AppWidgetState extends State<AppWidget> {
         title: 'Tractian',
         debugShowCheckedModeBanner: false,
         routerConfig: AppRoutes.router,
-        theme: ThemeData(scaffoldBackgroundColor: AppColors.primaryGray, useMaterial3: true),
+        theme: ThemeData(
+            appBarTheme: const AppBarTheme(backgroundColor: AppColors.appBar),
+            scaffoldBackgroundColor: AppColors.scaffold, useMaterial3: true),
       ),
     );
   }
