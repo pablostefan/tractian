@@ -1,10 +1,10 @@
+import 'package:tractian/features/assets/domain/entities/base_entity.dart';
+
 enum AssetType { component, asset, standalone }
 
 enum AssetStatus { operating, alert }
 
-class AssetEntity {
-  final String id;
-  final String name;
+class AssetEntity extends BaseEntity {
   final String? parentId;
   final String? sensorId;
   final String? sensorType;
@@ -14,8 +14,8 @@ class AssetEntity {
   final AssetType type;
 
   AssetEntity({
-    required this.id,
-    required this.name,
+    required super.id,
+    required super.name,
     this.parentId,
     this.sensorId,
     this.sensorType,

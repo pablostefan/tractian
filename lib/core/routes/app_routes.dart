@@ -4,8 +4,10 @@ import 'package:tractian/features/assets/presentation/pages/assets_page.dart';
 import 'package:tractian/features/menu/presentation/pages/menu_page.dart';
 
 abstract class AppRoutes {
-  static final router = GoRouter(initialLocation: AppRoute.menu.path, routes: [
-    GoRoute(
+  static final router = GoRouter(
+    initialLocation: AppRoute.menu.path,
+    routes: [
+      GoRoute(
         name: AppRoute.menu.name,
         path: AppRoute.menu.path,
         builder: (context, state) => const MenuPage(),
@@ -13,7 +15,9 @@ abstract class AppRoutes {
           GoRoute(
               name: AppRoute.assets.name,
               path: AppRoute.assets.path,
-              builder: (context, state) => AssetsPage()),
-        ]),
-  ]);
+              builder: (context, state) => AssetsPage(companyId: state.extra as String)),
+        ],
+      ),
+    ],
+  );
 }

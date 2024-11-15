@@ -1,14 +1,14 @@
+import 'package:tractian/features/assets/domain/entities/base_entity.dart';
+
 enum LocationType { location, subLocation }
 
-class LocationEntity {
-  final String id;
-  final String name;
+class LocationEntity extends BaseEntity {
   final String? parentId;
   final LocationType type;
 
   LocationEntity({
-    required this.id,
-    required this.name,
+    required super.id,
+    required super.name,
     this.parentId,
   }) : type = _determineType(parentId);
 

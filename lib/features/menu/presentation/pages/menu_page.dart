@@ -33,7 +33,7 @@ class _MenuPageState extends State<MenuPage> {
           listenable: _controller,
           builder: (context, child) => CompaniesListWidget(
             companies: _controller.companies,
-            onTapCompany: (company) => GoRouter.of(context).pushNamed(AppRoute.assets.name, extra: company),
+            onTapCompany: (company) => GoRouter.of(context).pushNamed(AppRoute.assets.name, extra: company.id),
           ),
         ),
       ),

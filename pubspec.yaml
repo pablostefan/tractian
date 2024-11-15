@@ -19,6 +19,7 @@ dependencies:
   gap: ^3.0.1
   flutter_svg: ^2.0.14
   modal_progress_hud_nsn: ^0.5.1
+  flutter_fancy_tree_view: ^1.6.0
 
 dev_dependencies:
   flutter_test:

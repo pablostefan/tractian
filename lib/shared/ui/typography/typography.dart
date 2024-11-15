@@ -26,6 +26,16 @@ extension TypographyExtension on Text {
     return _getTextTypography(text: this, textStyle: defaultStyle);
   }
 
+  Text bodySmallRegular({TextStyle? style}) {
+    TextStyle defaultStyle = _getTextStyle(
+        fontSize: TypographyFontSize.small,
+        fontWeight: TypographyFontWeight.regular,
+        height: TypographyLineHeight.body,
+        mergeStyle: style);
+
+    return _getTextTypography(text: this, textStyle: defaultStyle);
+  }
+
   Text _getTextTypography({required Text text, required TextStyle textStyle}) {
     return Text(text.data!,
         style: textStyle,
