@@ -13,17 +13,4 @@ extension AssetsDto on AssetEntity {
       status: json['status'],
     );
   }
-
-  Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'name': name,
-      'gatewayId': gatewayId,
-      'locationId': locationId,
-      'parentId': parentId,
-      'sensorId': sensorId,
-      'sensorType': sensorType,
-      'status': status,
-    };
-  }
 }

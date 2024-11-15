@@ -1,20 +1,15 @@
-import 'package:tractian/features/assets/domain/entities/base_entity.dart';
+import 'package:tractian/features/assets/domain/entities/enums/componente_type.dart';
+import 'package:tractian/features/assets/domain/entities/tree_component.dart';
 
-enum LocationType { location, subLocation }
-
-class LocationEntity extends BaseEntity {
+class LocationEntity extends TreeComponent {
   final String? parentId;
-  final LocationType type;
 
   LocationEntity({
     required super.id,
     required super.name,
+    super.type = ComponentType.location,
     this.parentId,
-  }) : type = _determineType(parentId);
+  });
 
   bool get unliked => parentId == null;
-
-  static LocationType _determineType(String? parentId) {
-    return parentId == null ? LocationType.location : LocationType.subLocation;
-  }
 }

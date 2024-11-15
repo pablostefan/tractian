@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_fancy_tree_view/flutter_fancy_tree_view.dart';
 import 'package:tractian/features/assets/domain/entities/tree_entity.dart';
 import 'package:tractian/features/assets/presentation/widgets/tree_item_widget.dart';
+import 'package:tractian/shared/ui/app_dimens.dart';
 
 class TreeViewWidget extends StatefulWidget {
   final List<TreeEntity> tree;
@@ -31,6 +32,7 @@ class _TreeViewWidgetState extends State<TreeViewWidget> {
   Widget build(BuildContext context) {
     return AnimatedTreeView<TreeEntity>(
       treeController: _treeController,
+      padding: const EdgeInsets.symmetric(horizontal: AppDimens.nano, vertical: AppDimens.xxxs),
       nodeBuilder: (context, entry) {
         return InkWell(
           onTap: () => _treeController.toggleExpansion(entry.node),

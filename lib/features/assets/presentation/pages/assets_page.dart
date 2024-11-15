@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:tractian/features/assets/presentation/controllers/assets_controller.dart';
+import 'package:tractian/features/assets/presentation/widgets/assets_filter_widget.dart';
 import 'package:tractian/features/assets/presentation/widgets/tree_view_widget.dart';
 import 'package:tractian/l10n/translate.dart';
 import 'package:tractian/shared/ui/app_colors.dart';
@@ -31,15 +32,22 @@ class _AssetsPageState extends State<AssetsPage> {
       appBar: AppBar(
         centerTitle: true,
         backgroundColor: AppColors.appBar,
-        iconTheme: const IconThemeData(color: AppColors.primaryIcon),
-        title: Text(Translate.strings.assets).bodySmallMedium(),
+        iconTheme: const IconThemeData(color: AppColors.secondaryIcon),
+        title: Text(Translate.strings.assets).bodyMediumRegular(),
       ),
       body: ValueListenableBuilder(
         valueListenable: _controller.isLoading,
         builder: (context, value, child) => ModalProgressHUD(inAsyncCall: value, child: child!),
-        child: ListenableBuilder(
-          listenable: _controller,
-          builder: (_, __) => TreeViewWidget(tree: _controller.assetsTree),
+        child: Column(
+          children: [
+            AssetsFilterWidget(controller: _controller.searchController),
+            Expanded(
+              child: ListenableBuilder(
+                listenable: _controller,
+                builder: (_, __) => TreeViewWidget(tree: _controller.assetsTree),
+              ),
+            ),
+          ],
         ),
       ),
     );

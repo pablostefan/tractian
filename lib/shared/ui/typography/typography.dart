@@ -6,6 +6,16 @@ import 'package:tractian/shared/ui/typography/typography_font_weight.dart';
 import 'package:tractian/shared/ui/typography/typography_line_height.dart';
 
 extension TypographyExtension on Text {
+  Text bodyMediumRegular({TextStyle? style}) {
+    TextStyle defaultStyle = _getTextStyle(
+        fontSize: TypographyFontSize.medium,
+        fontWeight: TypographyFontWeight.regular,
+        height: TypographyLineHeight.body,
+        mergeStyle: style);
+
+    return _getTextTypography(text: this, textStyle: defaultStyle);
+  }
+
   Text bodyMediumMedium({TextStyle? style}) {
     TextStyle defaultStyle = _getTextStyle(
         fontSize: TypographyFontSize.medium,

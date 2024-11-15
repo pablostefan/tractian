@@ -8,4 +8,10 @@ abstract class Translate {
 
 abstract class AppStrings {
   String get assets;
+
+  String get searchAssetLocation;
+
+  String get energySensor;
+
+  String get critical;
 }

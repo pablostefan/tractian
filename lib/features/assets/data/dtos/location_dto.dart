@@ -8,12 +8,4 @@ extension LocationDto on LocationEntity {
       parentId: json['parentId'],
     );
   }
-
-  Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'name': name,
-      'parentId': parentId,
-    };
-  }
 }

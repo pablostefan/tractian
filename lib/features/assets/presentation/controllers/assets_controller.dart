@@ -1,6 +1,5 @@
 import 'dart:collection';
-
-import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:tractian/core/error/base_failure.dart';
 import 'package:tractian/features/assets/domain/entities/tree_entity.dart';
@@ -17,6 +16,8 @@ class AssetsController extends ChangeNotifier {
   final List<TreeEntity> _assetsTree = [];
 
   UnmodifiableListView<TreeEntity> get assetsTree => UnmodifiableListView(_assetsTree);
+
+  TextEditingController searchController = TextEditingController();
 
   void _setLoading(bool value) => isLoading.value = value;
 

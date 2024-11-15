@@ -1,13 +1,13 @@
 import 'package:tractian/features/assets/domain/entities/asset_entity.dart';
-import 'package:tractian/features/assets/domain/entities/base_entity.dart';
 import 'package:tractian/features/assets/domain/entities/location_entity.dart';
+import 'package:tractian/features/assets/domain/entities/tree_component.dart';
 import 'package:tractian/features/assets/domain/entities/tree_entity.dart';
 
-class TreeUtils {
+abstract class TreeUtils {
   /// Builds the tree from lists of [LocationEntity] and [AssetEntity]
   static List<TreeEntity> build(List<LocationEntity> locations, List<AssetEntity> assets) {
     // Index assets and locations by parentId and locationId
-    final Map<String, List<BaseEntity>> childrenByParentId = {};
+    final Map<String, List<TreeComponent>> childrenByParentId = {};
 
     for (var location in locations) {
       childrenByParentId.putIfAbsent(location.parentId ?? '', () => []).add(location);
@@ -22,7 +22,7 @@ class TreeUtils {
     // Filter root nodes (entities with no parent)
     final rootNodes = <TreeEntity>[];
     final rootLocations = locations.where((location) => location.unliked);
-    final rootAssets = assets.where((asset) => asset.unliked );
+    final rootAssets = assets.where((asset) => asset.unliked);
 
     rootNodes.addAll(rootLocations.map((location) => _buildTree(location, childrenByParentId)));
     rootNodes.addAll(rootAssets.map((asset) => _buildTree(asset, childrenByParentId)));
@@ -31,7 +31,7 @@ class TreeUtils {
   }
 
   /// Builds a tree node recursively
-  static TreeEntity _buildTree(BaseEntity entity, Map<String, List<BaseEntity>> childrenByParentId) {
+  static TreeEntity _buildTree(TreeComponent entity, Map<String, List<TreeComponent>> childrenByParentId) {
     final treeNode = TreeEntity(value: entity);
 
     final children = childrenByParentId[entity.id] ?? [];
