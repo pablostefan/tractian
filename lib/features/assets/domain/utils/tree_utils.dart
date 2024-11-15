@@ -39,26 +39,21 @@ abstract class TreeUtils {
     return currentTreeNode;
   }
 
-  static List<TreeEntity> searchInForest(
-      List<TreeEntity> forest, // List of trees
-      bool Function(TreeEntity) condition, // Search condition
-      ) {
+  static List<TreeEntity> searchInForest(List<TreeEntity> forest, bool Function(TreeEntity) condition) {
     final results = <TreeEntity>[];
 
     for (final tree in forest) {
       final match = _searchSubtree(tree, condition);
-      if (match != null) {
-        results.add(match); // Add the matched subtree
-      }
+      if (match != null) results.add(match);
     }
 
-    return results; // Return all matched subtrees
+    return results;
   }
 
   static TreeEntity? _searchSubtree(
-      TreeEntity node,
-      bool Function(TreeEntity) condition,
-      ) {
+    TreeEntity node,
+    bool Function(TreeEntity) condition,
+  ) {
     // Check if the current node matches the condition
     if (condition(node)) {
       // If it matches, we include the entire subtree
@@ -70,17 +65,12 @@ abstract class TreeUtils {
 
     for (final child in node.children) {
       final match = _searchSubtree(child, condition);
-      if (match != null) {
-        matchingChildren.add(match);
-      }
+      if (match != null) matchingChildren.add(match);
     }
 
     // If any children match, create a new node preserving only the matching children
     if (matchingChildren.isNotEmpty) {
-      return TreeEntity(
-        value: node.value,
-        children: matchingChildren,
-      );
+      return TreeEntity(value: node.value, children: matchingChildren);
     }
 
     // No match in the node or its subtree
@@ -88,16 +78,13 @@ abstract class TreeUtils {
   }
 
   static TreeEntity _cloneWithMatchedChildren(
-      TreeEntity node,
-      bool Function(TreeEntity) condition,
-      ) {
+    TreeEntity node,
+    bool Function(TreeEntity) condition,
+  ) {
     // Recursively clone the node, keeping its entire structure
     return TreeEntity(
       value: node.value,
-      children: node.children
-          .map((child) => _cloneWithMatchedChildren(child, condition))
-          .toList(),
+      children: node.children.map((child) => _cloneWithMatchedChildren(child, condition)).toList(),
     );
   }
-
 }

@@ -10,11 +10,13 @@ class TreeViewWidget extends StatefulWidget {
   const TreeViewWidget({super.key, required this.tree});
 
   @override
-  State<TreeViewWidget> createState() => _TreeViewWidgetState();
+  TreeViewWidgetState createState() => TreeViewWidgetState();
 }
 
-class _TreeViewWidgetState extends State<TreeViewWidget> {
+class TreeViewWidgetState extends State<TreeViewWidget> {
   late TreeController<TreeEntity> _treeController;
+
+  void toggleExpansion(TreeEntity node) => _treeController.toggleExpansion(node);
 
   @override
   void initState() {

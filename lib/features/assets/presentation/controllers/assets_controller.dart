@@ -43,20 +43,7 @@ class AssetsController extends ChangeNotifier {
 
   // Add listener to search controller
   void _addSearchListener() {
-    assetSearchController.addListener(() => _searchAssets(assetSearchController.text));
-  }
-
-  // Asset search
-  void _searchAssets(String query) {
-    if (query.isEmpty) {
-      _visibleAssetsTree = _allAssetsTree;
-    } else {
-      _visibleAssetsTree = TreeUtils.searchInForest(
-        _allAssetsTree,
-        (node) => node.value.name.toLowerCase().contains(query.toLowerCase()),
-      );
-    }
-    notifyListeners();
+    assetSearchController.addListener(_filterAssets);
   }
 
   // Fetch assets from use case
@@ -83,24 +70,31 @@ class AssetsController extends ChangeNotifier {
   // Apply filter for energy sensor
   void filterByEnergySensor() {
     isEnergySensorSelectedNotifier.value = !isEnergySensorSelectedNotifier.value;
-    if (isEnergySensorSelectedNotifier.value) {
-      _visibleAssetsTree =
-          TreeUtils.searchInForest(_allAssetsTree, (node) => node.value.componentSensorType == SensorType.energy);
-    } else {
-      _visibleAssetsTree = _allAssetsTree;
-    }
-    notifyListeners();
+    _filterAssets();
   }
 
   // Apply filter for critical status
   void filterByCriticalStatus() {
     isCriticalSelectedNotifier.value = !isCriticalSelectedNotifier.value;
-    if (isCriticalSelectedNotifier.value) {
-      _visibleAssetsTree =
-          TreeUtils.searchInForest(_allAssetsTree, (node) => node.value.componentStatus == AssetStatus.alert);
-    } else {
-      _visibleAssetsTree = _allAssetsTree;
+    _filterAssets();
+  }
+
+  // Filter assets based on search and filters
+  void _filterAssets() {
+    List<TreeEntity> assets = _allAssetsTree;
+
+    if (isEnergySensorSelectedNotifier.value) {
+      assets = TreeUtils.searchInForest(assets, (node) => node.value.componentSensorType == SensorType.energy);
     }
+    if (isCriticalSelectedNotifier.value) {
+      assets = TreeUtils.searchInForest(assets, (node) => node.value.componentStatus == AssetStatus.alert);
+    }
+    if (assetSearchController.text.isNotEmpty) {
+      var text = assetSearchController.text.toLowerCase();
+      assets = TreeUtils.searchInForest(assets, (node) => node.value.name.toLowerCase().contains(text));
+    }
+
+    _visibleAssetsTree = assets;
     notifyListeners();
   }
 }
