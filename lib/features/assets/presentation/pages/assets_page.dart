@@ -41,7 +41,7 @@ class _AssetsPageState extends State<AssetsPage> {
         child: Column(
           children: [
             AssetsFilterWidget(
-              controller: _controller.searchController,
+              searchController: _controller.searchController,
               filterEnergySensor: _controller.filterEnergySensor,
               filterCritical: _controller.filterCritical,
               criticalSelected: _controller.criticalSelected,
@@ -49,7 +49,7 @@ class _AssetsPageState extends State<AssetsPage> {
             ),
             ListenableBuilder(
               listenable: _controller,
-              builder: (_, __) => Expanded(child: TreeViewWidget(tree: _controller.assetsTree)),
+              builder: (_, __) => TreeViewWidget(tree: _controller.assetsTree),
             ),
           ],
         ),

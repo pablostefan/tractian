@@ -19,26 +19,38 @@ class _TreeViewWidgetState extends State<TreeViewWidget> {
   @override
   void initState() {
     super.initState();
-    _treeController = TreeController<TreeEntity>(roots: widget.tree, childrenProvider: (node) => node.children);
+    _treeController = TreeController<TreeEntity>(
+      roots: widget.tree,
+      parentProvider: (node) => node,
+      childrenProvider: (node) => node.children,
+    );
   }
 
   @override
   void didUpdateWidget(covariant TreeViewWidget oldWidget) {
     super.didUpdateWidget(oldWidget);
-    _treeController = TreeController<TreeEntity>(roots: widget.tree, childrenProvider: (node) => node.children);
+    if (oldWidget.tree != widget.tree) {
+      _treeController = TreeController<TreeEntity>(
+        roots: widget.tree,
+        parentProvider: (node) => node,
+        childrenProvider: (node) => node.children,
+      );
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedTreeView<TreeEntity>(
-      treeController: _treeController,
-      padding: const EdgeInsets.symmetric(horizontal: AppDimens.micro, vertical: AppDimens.xxs),
-      nodeBuilder: (context, entry) {
-        return InkWell(
-          onTap: () => _treeController.toggleExpansion(entry.node),
-          child: TreeItemWidget(entry: entry),
-        );
-      },
+    return Expanded(
+      child: AnimatedTreeView<TreeEntity>(
+        treeController: _treeController,
+        padding: const EdgeInsets.symmetric(horizontal: AppDimens.micro, vertical: AppDimens.xxs),
+        nodeBuilder: (context, entry) {
+          return InkWell(
+            onTap: () => _treeController.toggleExpansion(entry.node),
+            child: TreeItemWidget(entry: entry),
+          );
+        },
+      ),
     );
   }
 }

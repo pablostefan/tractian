@@ -3,7 +3,7 @@ import 'package:tractian/core/base/base_repository.dart';
 import 'package:tractian/core/error/base_failure.dart';
 import 'package:tractian/features/assets/domain/entities/asset_entity.dart';
 import 'package:tractian/features/assets/domain/entities/location_entity.dart';
-import 'package:tractian/core/utils/tree_utils.dart';
+import 'package:tractian/features/assets/domain/utils/tree_utils.dart';
 import 'package:tractian/features/assets/domain/entities/tree_entity.dart';
 import 'package:tractian/features/assets/domain/repositories/assets_repository.dart';
 import 'package:tractian/features/assets/domain/usecases/assets_usecase.dart';

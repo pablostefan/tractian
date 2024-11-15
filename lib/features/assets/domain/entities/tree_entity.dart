@@ -4,5 +4,5 @@ class TreeEntity {
   final TreeComponent value;
   List<TreeEntity> children;
 
-  TreeEntity({required this.value}) : children = [];
+  TreeEntity({required this.value, List<TreeEntity>? children}) : children = children ?? [];
 }

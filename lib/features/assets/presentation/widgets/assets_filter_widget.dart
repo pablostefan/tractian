@@ -8,7 +8,7 @@ import 'package:tractian/shared/ui/app_dimens.dart';
 import 'package:tractian/shared/ui/app_gaps.dart';
 
 class AssetsFilterWidget extends StatelessWidget {
-  final TextEditingController controller;
+  final TextEditingController searchController;
   final VoidCallback filterEnergySensor;
   final VoidCallback filterCritical;
   final ValueNotifier<bool> energySensorSelected;
@@ -16,7 +16,7 @@ class AssetsFilterWidget extends StatelessWidget {
 
   const AssetsFilterWidget({
     super.key,
-    required this.controller,
+    required this.searchController,
     required this.filterEnergySensor,
     required this.filterCritical,
     required this.energySensorSelected,
@@ -28,12 +28,13 @@ class AssetsFilterWidget extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(AppDimens.xxxs),
       decoration: const BoxDecoration(border: Border(bottom: BorderSide(color: AppColors.divider))),
-      child: Column(children: [
-        SearchTextFieldWidget(controller: controller),
-        AppGaps.nano,
-        Row(
-          children: [
-            ValueListenableBuilder(
+      child: Column(
+        children: [
+          SearchTextFieldWidget(controller: searchController),
+          AppGaps.nano,
+          Row(
+            children: [
+              ValueListenableBuilder(
                 valueListenable: energySensorSelected,
                 builder: (_, value, __) {
                   return FilterButtonWidget(
@@ -42,9 +43,10 @@ class AssetsFilterWidget extends StatelessWidget {
                     onPressed: filterEnergySensor,
                     isSelected: value,
                   );
-                }),
-            AppGaps.nano,
-            ValueListenableBuilder(
+                },
+              ),
+              AppGaps.nano,
+              ValueListenableBuilder(
                 valueListenable: criticalSelected,
                 builder: (_, value, __) {
                   return FilterButtonWidget(
@@ -53,10 +55,12 @@ class AssetsFilterWidget extends StatelessWidget {
                     onPressed: filterCritical,
                     isSelected: value,
                   );
-                }),
-          ],
-        )
-      ]),
+                },
+              ),
+            ],
+          )
+        ],
+      ),
     );
   }
 }
