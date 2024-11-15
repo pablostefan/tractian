@@ -9,8 +9,19 @@ import 'package:tractian/shared/ui/app_gaps.dart';
 
 class AssetsFilterWidget extends StatelessWidget {
   final TextEditingController controller;
+  final VoidCallback filterEnergySensor;
+  final VoidCallback filterCritical;
+  final ValueNotifier<bool> energySensorSelected;
+  final ValueNotifier<bool> criticalSelected;
 
-  const AssetsFilterWidget({super.key, required this.controller});
+  const AssetsFilterWidget({
+    super.key,
+    required this.controller,
+    required this.filterEnergySensor,
+    required this.filterCritical,
+    required this.energySensorSelected,
+    required this.criticalSelected,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -22,19 +33,27 @@ class AssetsFilterWidget extends StatelessWidget {
         AppGaps.nano,
         Row(
           children: [
-            FilterButtonWidget(
-              icon: AppSvgs.ic_energy,
-              label: Translate.strings.energySensor,
-              onPressed: () {},
-              isSelected: false,
-            ),
+            ValueListenableBuilder(
+                valueListenable: energySensorSelected,
+                builder: (_, value, __) {
+                  return FilterButtonWidget(
+                    icon: AppSvgs.ic_energy,
+                    label: Translate.strings.energySensor,
+                    onPressed: filterEnergySensor,
+                    isSelected: value,
+                  );
+                }),
             AppGaps.nano,
-            FilterButtonWidget(
-              icon: AppSvgs.ic_exclamation,
-              label: Translate.strings.critical,
-              onPressed: () {},
-              isSelected: false,
-            ),
+            ValueListenableBuilder(
+                valueListenable: criticalSelected,
+                builder: (_, value, __) {
+                  return FilterButtonWidget(
+                    icon: AppSvgs.ic_exclamation,
+                    label: Translate.strings.critical,
+                    onPressed: filterCritical,
+                    isSelected: value,
+                  );
+                }),
           ],
         )
       ]),

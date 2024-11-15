@@ -1,4 +1,5 @@
 import 'dart:collection';
+
 import 'package:flutter/material.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:tractian/core/error/base_failure.dart';
@@ -12,6 +13,8 @@ class AssetsController extends ChangeNotifier {
   AssetsController(this._assetsUseCase);
 
   ValueNotifier<bool> isLoading = ValueNotifier(false);
+  ValueNotifier<bool> criticalSelected = ValueNotifier(false);
+  ValueNotifier<bool> energySensorSelected = ValueNotifier(false);
 
   final List<TreeEntity> _assetsTree = [];
 
@@ -36,5 +39,13 @@ class AssetsController extends ChangeNotifier {
   void _setError(BaseFailure failure) {
     _setLoading(false);
     showToastWidget(AlertWidget(message: failure.message));
+  }
+
+  void filterEnergySensor() {
+    energySensorSelected.value = !energySensorSelected.value;
+  }
+
+  void filterCritical() {
+    criticalSelected.value = !criticalSelected.value;
   }
 }

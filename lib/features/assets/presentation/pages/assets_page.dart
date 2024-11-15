@@ -40,12 +40,16 @@ class _AssetsPageState extends State<AssetsPage> {
         builder: (context, value, child) => ModalProgressHUD(inAsyncCall: value, child: child!),
         child: Column(
           children: [
-            AssetsFilterWidget(controller: _controller.searchController),
-            Expanded(
-              child: ListenableBuilder(
-                listenable: _controller,
-                builder: (_, __) => TreeViewWidget(tree: _controller.assetsTree),
-              ),
+            AssetsFilterWidget(
+              controller: _controller.searchController,
+              filterEnergySensor: _controller.filterEnergySensor,
+              filterCritical: _controller.filterCritical,
+              criticalSelected: _controller.criticalSelected,
+              energySensorSelected: _controller.energySensorSelected,
+            ),
+            ListenableBuilder(
+              listenable: _controller,
+              builder: (_, __) => Expanded(child: TreeViewWidget(tree: _controller.assetsTree)),
             ),
           ],
         ),

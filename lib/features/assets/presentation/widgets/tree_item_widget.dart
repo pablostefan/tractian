@@ -18,7 +18,7 @@ class TreeItemWidget extends StatelessWidget {
     return TreeIndentation(
       entry: entry,
       child: Padding(
-        padding: const EdgeInsets.only(bottom: AppDimens.nano),
+        padding: const EdgeInsets.symmetric(vertical: AppDimens.pico),
         child: Row(
           children: [
             Visibility(

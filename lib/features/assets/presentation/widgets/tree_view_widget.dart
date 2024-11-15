@@ -32,7 +32,7 @@ class _TreeViewWidgetState extends State<TreeViewWidget> {
   Widget build(BuildContext context) {
     return AnimatedTreeView<TreeEntity>(
       treeController: _treeController,
-      padding: const EdgeInsets.symmetric(horizontal: AppDimens.nano, vertical: AppDimens.xxxs),
+      padding: const EdgeInsets.symmetric(horizontal: AppDimens.micro, vertical: AppDimens.xxs),
       nodeBuilder: (context, entry) {
         return InkWell(
           onTap: () => _treeController.toggleExpansion(entry.node),
