@@ -16,6 +16,7 @@ class SearchTextFieldWidget extends StatelessWidget {
     return TextField(
       controller: controller,
       cursorColor: AppColors.quaternaryIcon,
+      onTapOutside: (_) => FocusScope.of(context).unfocus(),
       decoration: InputDecoration(
         filled: true,
         fillColor: AppColors.primaryTextField,
@@ -26,6 +27,7 @@ class SearchTextFieldWidget extends StatelessWidget {
           height: TypographyLineHeight.body,
           color: AppColors.quaternaryIcon,
         ),
+
         prefixIcon: const Icon(Icons.search, color: AppColors.quaternaryIcon),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(AppDimens.femto),

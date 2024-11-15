@@ -42,14 +42,14 @@ class _AssetsPageState extends State<AssetsPage> {
           children: [
             AssetsFilterWidget(
               searchController: _controller.assetSearchController,
-              filterEnergySensor: _controller.filterByEnergySensor,
-              filterCritical: _controller.filterByCriticalStatus,
+              filterEnergySensor: _controller.toggleEnergySensorFilter,
+              filterCritical: _controller.toggleCriticalStatusFilter,
               criticalSelected: _controller.isCriticalSelectedNotifier,
               energySensorSelected: _controller.isEnergySensorSelectedNotifier,
             ),
             ListenableBuilder(
               listenable: _controller,
-              builder: (_, __) => TreeViewWidget(tree: _controller.visibleAssetsTree),
+              builder: (_, __) => TreeViewWidget(treeController: _controller.treeController),
             ),
           ],
         ),

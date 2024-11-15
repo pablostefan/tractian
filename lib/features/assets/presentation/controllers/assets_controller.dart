@@ -1,6 +1,7 @@
 import 'dart:collection';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_fancy_tree_view/flutter_fancy_tree_view.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:tractian/core/error/base_failure.dart';
 import 'package:tractian/features/assets/domain/entities/enums/assets_status.dart';
@@ -23,17 +24,23 @@ class AssetsController extends ChangeNotifier {
     assetSearchController.dispose();
   }
 
+  // Tree controller
+  final TreeController<TreeEntity> treeController = TreeController<TreeEntity>(
+    roots: [],
+    childrenProvider: (node) => node.children,
+  );
+
   // State management
   final ValueNotifier<bool> isLoadingNotifier = ValueNotifier(false);
   final ValueNotifier<bool> isCriticalSelectedNotifier = ValueNotifier(false);
   final ValueNotifier<bool> isEnergySensorSelectedNotifier = ValueNotifier(false);
 
   // Asset tree data
-  final List<TreeEntity> _allAssetsTree = [];
-  List<TreeEntity> _visibleAssetsTree = [];
+  final List<TreeEntity> _allAssets = [];
+  List<TreeEntity> _filteredAssets = [];
 
   // External access to the filtered tree
-  UnmodifiableListView<TreeEntity> get visibleAssetsTree => UnmodifiableListView(_visibleAssetsTree);
+  UnmodifiableListView<TreeEntity> get visibleAssets => UnmodifiableListView(_filteredAssets);
 
   // Search controller
   final TextEditingController assetSearchController = TextEditingController();
@@ -42,9 +49,7 @@ class AssetsController extends ChangeNotifier {
   void _setLoading(bool value) => isLoadingNotifier.value = value;
 
   // Add listener to search controller
-  void _addSearchListener() {
-    assetSearchController.addListener(_filterAssets);
-  }
+  void _addSearchListener() => assetSearchController.addListener(_applyFilters);
 
   // Fetch assets from use case
   Future<void> fetchAssets(String companyId) async {
@@ -56,45 +61,80 @@ class AssetsController extends ChangeNotifier {
 
   // Handle successful asset fetching
   void _handleAssetsFetched(List<TreeEntity> response) {
-    _allAssetsTree.addAll(response);
-    _visibleAssetsTree.addAll(response);
+    _allAssets.addAll(response);
+    _filteredAssets = List.from(response);
+    treeController.roots = _allAssets;
+    treeController.rebuild();
     notifyListeners();
   }
 
   // Handle error during fetching
   void _handleError(BaseFailure failure) {
     _setLoading(false);
-    showToastWidget(AlertWidget(message: failure.message));
+    _showErrorToast(failure.message);
   }
 
-  // Apply filter for energy sensor
-  void filterByEnergySensor() {
+  // Display error as toast
+  void _showErrorToast(String message) {
+    showToastWidget(AlertWidget(message: message));
+  }
+
+  // Toggle energy sensor filter
+  void toggleEnergySensorFilter() {
     isEnergySensorSelectedNotifier.value = !isEnergySensorSelectedNotifier.value;
-    _filterAssets();
+    _applyFilters();
   }
 
-  // Apply filter for critical status
-  void filterByCriticalStatus() {
+  // Toggle critical status filter
+  void toggleCriticalStatusFilter() {
     isCriticalSelectedNotifier.value = !isCriticalSelectedNotifier.value;
-    _filterAssets();
+    _applyFilters();
   }
 
-  // Filter assets based on search and filters
-  void _filterAssets() {
-    List<TreeEntity> assets = _allAssetsTree;
+  // Apply all active filters
+  void _applyFilters() {
+    var filteredAssets = List<TreeEntity>.from(_allAssets);
 
+    if (assetSearchController.text.isNotEmpty) {
+      filteredAssets = _filterBySearch(filteredAssets, assetSearchController.text);
+    }
     if (isEnergySensorSelectedNotifier.value) {
-      assets = TreeUtils.searchInForest(assets, (node) => node.value.componentSensorType == SensorType.energy);
+      filteredAssets = _filterByEnergySensor(filteredAssets);
     }
     if (isCriticalSelectedNotifier.value) {
-      assets = TreeUtils.searchInForest(assets, (node) => node.value.componentStatus == AssetStatus.alert);
-    }
-    if (assetSearchController.text.isNotEmpty) {
-      var text = assetSearchController.text.toLowerCase();
-      assets = TreeUtils.searchInForest(assets, (node) => node.value.name.toLowerCase().contains(text));
+      filteredAssets = _filterByCriticalStatus(filteredAssets);
     }
 
-    _visibleAssetsTree = assets;
-    notifyListeners();
+    _rebuildTree(filteredAssets);
+  }
+
+  // Filter by search text
+  List<TreeEntity> _filterBySearch(List<TreeEntity> assets, String query) {
+    final lowerCaseQuery = query.toLowerCase();
+    return TreeUtils.searchInForest(assets, (node) => node.value.name.toLowerCase().contains(lowerCaseQuery));
+  }
+
+  // Filter by energy sensor
+  List<TreeEntity> _filterByEnergySensor(List<TreeEntity> assets) {
+    return TreeUtils.searchInForest(assets, (node) => node.value.componentSensorType == SensorType.energy);
+  }
+
+  // Filter by critical status
+  List<TreeEntity> _filterByCriticalStatus(List<TreeEntity> assets) {
+    return TreeUtils.searchInForest(assets, (node) => node.value.componentStatus == AssetStatus.alert);
+  }
+
+  // Rebuild the tree with filtered assets
+  void _rebuildTree(List<TreeEntity> assets) {
+    _filteredAssets = assets;
+    treeController.roots = _filteredAssets;
+    treeController.rebuild();
+
+    // Expand nodes if filtered
+    if (_filteredAssets.length < _allAssets.length) {
+      Future.delayed(Durations.short4, () => treeController.expandCascading(_filteredAssets));
+    } else {
+      treeController.collapseAll();
+    }
   }
 }

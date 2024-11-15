@@ -5,50 +5,24 @@ import 'package:tractian/features/assets/presentation/widgets/tree_item_widget.d
 import 'package:tractian/shared/ui/app_dimens.dart';
 
 class TreeViewWidget extends StatefulWidget {
-  final List<TreeEntity> tree;
+  final TreeController<TreeEntity> treeController;
 
-  const TreeViewWidget({super.key, required this.tree});
+  const TreeViewWidget({super.key, required this.treeController});
 
   @override
   TreeViewWidgetState createState() => TreeViewWidgetState();
 }
 
 class TreeViewWidgetState extends State<TreeViewWidget> {
-  late TreeController<TreeEntity> _treeController;
-
-  void toggleExpansion(TreeEntity node) => _treeController.toggleExpansion(node);
-
-  @override
-  void initState() {
-    super.initState();
-    _treeController = TreeController<TreeEntity>(
-      roots: widget.tree,
-      parentProvider: (node) => node,
-      childrenProvider: (node) => node.children,
-    );
-  }
-
-  @override
-  void didUpdateWidget(covariant TreeViewWidget oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    if (oldWidget.tree != widget.tree) {
-      _treeController = TreeController<TreeEntity>(
-        roots: widget.tree,
-        parentProvider: (node) => node,
-        childrenProvider: (node) => node.children,
-      );
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Expanded(
       child: AnimatedTreeView<TreeEntity>(
-        treeController: _treeController,
+        treeController: widget.treeController,
         padding: const EdgeInsets.symmetric(horizontal: AppDimens.micro, vertical: AppDimens.xxs),
         nodeBuilder: (context, entry) {
           return InkWell(
-            onTap: () => _treeController.toggleExpansion(entry.node),
+            onTap: () => widget.treeController.toggleExpansion(entry.node),
             child: TreeItemWidget(entry: entry),
           );
         },
