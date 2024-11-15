@@ -11,31 +11,43 @@ class AppMenuController extends ChangeNotifier {
   final CompaniesUseCase _companiesUseCase;
 
   AppMenuController(this._companiesUseCase) {
-    _getCompanies();
+    _fetchCompanies();
   }
 
+  // State management
+  final ValueNotifier<bool> isLoadingNotifier = ValueNotifier(false);
+
+  // Companies data
   final List<CompanyEntity> _companies = [];
 
   UnmodifiableListView<CompanyEntity> get companies => UnmodifiableListView(_companies);
 
-  ValueNotifier<bool> isLoading = ValueNotifier(false);
+  // Private method to set loading state
+  void _setLoading(bool value) => isLoadingNotifier.value = value;
 
-  void _setLoading(bool value) => isLoading.value = value;
-
-  void _getCompanies() async {
+  // Fetch companies from use case
+  Future<void> _fetchCompanies() async {
     _setLoading(true);
     final result = await _companiesUseCase.getCompanies();
-    result.fold(_setError, _getCompaniesSuccess);
+    result.fold(_handleError, _handleCompaniesFetched);
     _setLoading(false);
   }
 
-  void _getCompaniesSuccess(List<CompanyEntity> response) {
+  // Handle successful fetch
+  void _handleCompaniesFetched(List<CompanyEntity> response) {
+    _companies.clear(); // Clear existing data to avoid duplicates
     _companies.addAll(response);
     notifyListeners();
   }
 
-  void _setError(BaseFailure failure) {
+  // Handle error during fetch
+  void _handleError(BaseFailure failure) {
     _setLoading(false);
-    showToastWidget(AlertWidget(message: failure.message));
+    _showErrorToast(failure.message);
+  }
+
+  // Display error as toast
+  void _showErrorToast(String message) {
+    showToastWidget(AlertWidget(message: message));
   }
 }

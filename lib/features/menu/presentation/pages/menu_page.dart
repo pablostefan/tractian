@@ -27,7 +27,7 @@ class _MenuPageState extends State<MenuPage> {
         title: SvgPicture.asset(AppSvgs.ic_logo.path),
       ),
       body: ValueListenableBuilder(
-        valueListenable: _controller.isLoading,
+        valueListenable: _controller.isLoadingNotifier,
         builder: (context, value, child) => ModalProgressHUD(inAsyncCall: value, child: child!),
         child: ListenableBuilder(
           listenable: _controller,

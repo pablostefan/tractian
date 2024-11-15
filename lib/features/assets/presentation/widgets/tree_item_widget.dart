@@ -36,11 +36,14 @@ class TreeItemWidget extends StatelessWidget {
             AppGaps.pico,
             Expanded(child: Text(entry.node.value.name).bodySmallRegular().color(AppColors.secondaryText)),
             Visibility(
-                visible: entry.node.value.componentSensorType == SensorType.energy,
-                child: SvgPicture.asset(entry.node.value.componentSensorType?.icon?.path ?? "")),
+              visible: entry.node.value.componentSensorType == SensorType.energy,
+              child: SvgPicture.asset(entry.node.value.componentSensorType?.icon?.path ?? ""),
+            ),
+            AppGaps.pico,
             Visibility(
-                visible: entry.node.value.componentStatus == AssetStatus.alert,
-                child: SvgPicture.asset(entry.node.value.componentStatus?.icon?.path ?? "")),
+              visible: entry.node.value.componentStatus == AssetStatus.alert,
+              child: SvgPicture.asset(entry.node.value.componentStatus?.icon?.path ?? ""),
+            ),
           ],
         ),
       ),

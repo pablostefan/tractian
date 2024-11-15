@@ -23,7 +23,7 @@ class _AssetsPageState extends State<AssetsPage> {
   @override
   void initState() {
     super.initState();
-    _controller.getAssets(widget.companyId);
+    _controller.fetchAssets(widget.companyId);
   }
 
   @override
@@ -36,20 +36,20 @@ class _AssetsPageState extends State<AssetsPage> {
         title: Text(Translate.strings.assets).bodyMediumRegular(),
       ),
       body: ValueListenableBuilder(
-        valueListenable: _controller.isLoading,
+        valueListenable: _controller.isLoadingNotifier,
         builder: (context, value, child) => ModalProgressHUD(inAsyncCall: value, child: child!),
         child: Column(
           children: [
             AssetsFilterWidget(
-              searchController: _controller.searchController,
-              filterEnergySensor: _controller.filterEnergySensor,
-              filterCritical: _controller.filterCritical,
-              criticalSelected: _controller.criticalSelected,
-              energySensorSelected: _controller.energySensorSelected,
+              searchController: _controller.assetSearchController,
+              filterEnergySensor: _controller.filterByEnergySensor,
+              filterCritical: _controller.filterByCriticalStatus,
+              criticalSelected: _controller.isCriticalSelectedNotifier,
+              energySensorSelected: _controller.isEnergySensorSelectedNotifier,
             ),
             ListenableBuilder(
               listenable: _controller,
-              builder: (_, __) => TreeViewWidget(tree: _controller.assetsTree),
+              builder: (_, __) => TreeViewWidget(tree: _controller.visibleAssetsTree),
             ),
           ],
         ),
