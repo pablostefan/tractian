@@ -32,6 +32,9 @@ principais pastas são:
 
 - [**Flutter**](https://flutter.dev): Desenvolvimento de interfaces nativas.
 - [**Dio**](https://pub.dev/packages/dio): Requisições HTTP.
+- [**GoRouter**](https://pub.dev/packages/go_router): Gerenciamento de rotas.
+- [**Either**](https://pub.dev/packages/either_dart): Tratamento de erros.
+- [**GetIt**](https://pub.dev/packages/get_it): Injeção de dependência.
 - **Clean Architecture**: Organização modular em camadas independentes.
 - **Testes Unitários**: Garantia de qualidade com validação automatizada.
 
@@ -40,7 +43,7 @@ principais pastas são:
 A classe `TreeUtils` ajuda a organizar e buscar dados em hierarquias, como localizações e ativos de uma fábrica. Ela
 oferece duas funcionalidades principais:
 
-### **1. Construção de Árvores**
+### **Construção de Árvores**
 
 A partir de listas planas de localizações (`LocationEntity`) e ativos (`AssetEntity`), cria uma estrutura de árvore com
 base nos relacionamentos (`parentId` ou `locationId`).
@@ -49,7 +52,7 @@ base nos relacionamentos (`parentId` ou `locationId`).
     - Identifica os nós raiz (sem pai).
     - Conecta cada nó aos seus filhos de forma iterativa usando um mapeamento eficiente.
 
-### **2. Busca em Árvores**
+### **Busca em Árvores**
 
 Filtra a árvore para encontrar apenas os nós que atendem a uma condição específica, recriando a hierarquia
 correspondente.
