@@ -49,6 +49,8 @@ base nos relacionamentos (`parentId` ou `locationId`).
     - Identifica os nós raiz (sem pai).
     - Conecta cada nó aos seus filhos de forma iterativa usando um mapeamento eficiente.
 
+----
+
 ### **2. Busca em Árvores**
 
 Filtra a árvore para encontrar apenas os nós que atendem a uma condição específica, recriando a hierarquia
