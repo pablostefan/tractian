@@ -4,73 +4,96 @@ import 'package:tractian/features/assets/domain/entities/tree_component.dart';
 import 'package:tractian/features/assets/domain/entities/tree_entity.dart';
 
 abstract class TreeUtils {
-  /// Builds the tree from lists of [LocationEntity] and [AssetEntity]
+  /// Builds the tree structure from lists of [LocationEntity] and [AssetEntity].
+  /// This method organizes the data hierarchically, linking locations and assets
+  /// based on their parent or location IDs.
   static List<TreeEntity> build(List<LocationEntity> locations, List<AssetEntity> assets) {
-    // Index assets and locations by parentId and locationId
+    // Map to group children nodes by their parent ID.
     final Map<String, List<TreeComponent>> childrenByParentId = {};
 
+    // Group locations by parent ID.
     for (var location in locations) {
       childrenByParentId.putIfAbsent(location.parentId ?? '', () => []).add(location);
     }
 
+    // Group assets by parent ID or location ID.
     for (var asset in assets) {
-      // Assets can be children of a parent or associated with a location
       childrenByParentId.putIfAbsent(asset.parentId ?? '', () => []).add(asset);
       childrenByParentId.putIfAbsent(asset.locationId ?? '', () => []).add(asset);
     }
 
-    // Filter root nodes (entities with no parent)
-    final rootEntities = <TreeEntity>[];
+    // Identify root nodes (nodes with no parent).
+    final List<TreeEntity> rootNodes = [];
+    final queue = <TreeEntity>[];
+
+    // Add root locations to the root list and processing queue.
     final rootLocations = locations.where((location) => location.unliked);
+    for (var location in rootLocations) {
+      final root = TreeEntity(value: location);
+      rootNodes.add(root);
+      queue.add(root);
+    }
+
+    // Add root assets to the root list and processing queue.
     final rootAssets = assets.where((asset) => asset.unliked);
+    for (var asset in rootAssets) {
+      final root = TreeEntity(value: asset);
+      rootNodes.add(root);
+      queue.add(root);
+    }
 
-    rootEntities.addAll(rootLocations.map((location) => _buildTree(location, childrenByParentId)));
-    rootEntities.addAll(rootAssets.map((asset) => _buildTree(asset, childrenByParentId)));
+    // Iteratively build the tree structure.
+    while (queue.isNotEmpty) {
+      final current = queue.removeAt(0);
 
-    return rootEntities;
+      // Retrieve the children of the current node.
+      final children = childrenByParentId[current.value.id] ?? [];
+
+      for (final child in children) {
+        // Create a TreeEntity for each child and link it to the parent node.
+        final childNode = TreeEntity(value: child);
+        current.children.add(childNode);
+        queue.add(childNode);
+      }
+    }
+
+    return rootNodes;
   }
 
-  /// Builds a tree node recursively
-  static TreeEntity _buildTree(TreeComponent entity, Map<String, List<TreeComponent>> childrenByParentId) {
-    final currentTreeNode = TreeEntity(value: entity);
-    final childEntities = childrenByParentId[entity.id] ?? [];
-    currentTreeNode.children.addAll(childEntities.map((child) => _buildTree(child, childrenByParentId)));
-
-    return currentTreeNode;
-  }
-
-  /// Optimized search method to find all matching subtrees
-  static List<TreeEntity> searchHierarchy(List<TreeEntity> forest, bool Function(TreeEntity) condition) {
+  /// Searches the tree structure for nodes that match a given condition.
+  /// Returns the matching subtrees, preserving their structure.
+  static List<TreeEntity> searchHierarchy(
+    List<TreeEntity> forest,
+    bool Function(TreeEntity) condition,
+  ) {
     final results = <TreeEntity>[];
 
-    for (final tree in forest) {
-      final match = _optimizedSearchSubtree(tree, condition);
-      if (match != null) results.add(match);
+    for (final root in forest) {
+      final queue = <TreeEntity>[]; // Queue for iterative processing.
+      final matchingChildren = <TreeEntity>[]; // Collect matched children.
+
+      // Add the root node to the queue for processing.
+      queue.add(root);
+
+      // Process the tree iteratively.
+      while (queue.isNotEmpty) {
+        final current = queue.removeAt(0);
+
+        // Check if the current node matches the condition.
+        if (condition(current)) {
+          matchingChildren.add(current); // Add to matching children if it matches.
+        } else {
+          // If the current node doesn't match, process its children.
+          queue.addAll(current.children);
+        }
+      }
+
+      // If matching children were found, recreate the subtree with matched children.
+      if (matchingChildren.isNotEmpty) {
+        results.add(TreeEntity(value: root.value, children: matchingChildren));
+      }
     }
 
     return results;
-  }
-
-  static TreeEntity? _optimizedSearchSubtree(TreeEntity node, bool Function(TreeEntity) condition) {
-    // If the current node matches, return the entire subtree
-    if (condition(node)) {
-      return node;
-    }
-
-    // Search in children, keeping only matched subtrees
-    final matchingChildren = <TreeEntity>[];
-    for (final child in node.children) {
-      final match = _optimizedSearchSubtree(child, condition);
-      if (match != null) matchingChildren.add(match);
-
-    }
-
-    // If any children matched, create a new node with the matched children
-    if (matchingChildren.isNotEmpty) {
-      return TreeEntity(value: node.value, children: matchingChildren);
-    }
-
-    // No match in the node or its subtree
-    return null;
   }
 }
