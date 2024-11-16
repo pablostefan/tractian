@@ -3,24 +3,15 @@ import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:tractian/core/error/base_failure.dart';
 import 'package:tractian/features/menu/data/datasources/companies_datasource.dart';
-import 'package:tractian/features/menu/data/dtos/company_dto.dart';
 import 'package:tractian/features/menu/data/repositories/companies_repository_imp.dart';
 
 import 'companies_repository_test.mocks.dart';
+import 'test_data.dart';
 
 @GenerateNiceMocks([MockSpec<CompaniesDataSource>()])
 void main() {
   late MockCompaniesDataSource mockDataSource;
   late CompaniesRepositoryImp repository;
-
-  // Mock data for tests
-  final mockCompaniesJson = [
-    {"id": "662fd0ee639069143a8fc387", "name": "Jaguar"},
-    {"id": "662fd0fab3fd5656edb39af5", "name": "Tobias"},
-    {"id": "662fd100f990557384756e58", "name": "Apex"}
-  ];
-
-  final mockCompanies = mockCompaniesJson.map((json) => CompanyDto.fromJson(json)).toList();
 
   setUp(() {
     mockDataSource = MockCompaniesDataSource();
@@ -30,14 +21,15 @@ void main() {
   group('CompaniesRepository', () {
     test('should return a list of CompanyEntity when data source succeeds', () async {
       // Arrange
-      when(mockDataSource.getCompanies()).thenAnswer((_) async => mockCompaniesJson);
+      when(mockDataSource.getCompanies()).thenAnswer((_) async => TestData.mockCompaniesJson);
 
       // Act
       final result = await repository.getCompanies();
 
       // Assert
       expect(result.isRight, true, reason: 'Expected Right but got Left');
-      expect(result.right, equals(mockCompanies), reason: 'The returned companies do not match the mock data');
+      expect(result.right, equals(TestData.mockCompaniesEntity), reason: 'Not match the expected structure');
+      expect(result.right, equals(TestData.mockCompaniesDto), reason: 'Not match the expected structure');
       verify(mockDataSource.getCompanies()).called(1);
     });
 

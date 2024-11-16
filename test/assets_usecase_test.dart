@@ -33,15 +33,15 @@ void main() {
   group('AssetsUseCase', () {
     test('should return a tree of assets when repository getAssets', () async {
       // Arrange
-      when(mockRepository.getLocations(companyId)).thenAnswer((_) async => Right(TestData.mockLocations));
-      when(mockRepository.getAssets(companyId)).thenAnswer((_) async => Right(TestData.mockAssets));
+      when(mockRepository.getLocations(companyId)).thenAnswer((_) async => Right(TestData.mockLocationsEntity));
+      when(mockRepository.getAssets(companyId)).thenAnswer((_) async => Right(TestData.mockAssetsEntity));
 
       // Act
       final result = await useCase.getAssets(companyId);
 
       // Assert
       expect(result.isRight, true, reason: 'Expected Right but got Left');
-      expect(result.right, equals(TestData.mockTree), reason: 'Not match the expected structure');
+      expect(result.right, equals(TestData.mockTreeEntities), reason: 'Not match the expected structure');
       expect(result.right, equals(TestData.mockTreeByUtils), reason: 'Not match the expected structure');
       verify(mockRepository.getLocations(companyId)).called(1);
       verify(mockRepository.getAssets(companyId)).called(1);
@@ -49,15 +49,15 @@ void main() {
 
     test('should return a tree of assets when repository filterBySearch', () async {
       // Arrange
-      when(mockRepository.getLocations(companyId)).thenAnswer((_) async => Right(TestData.mockLocations));
-      when(mockRepository.getAssets(companyId)).thenAnswer((_) async => Right(TestData.mockAssets));
+      when(mockRepository.getLocations(companyId)).thenAnswer((_) async => Right(TestData.mockLocationsEntity));
+      when(mockRepository.getAssets(companyId)).thenAnswer((_) async => Right(TestData.mockAssetsEntity));
 
       // Act
       final result = await useCase.filterBySearch(companyId, TestData.search);
 
       // Assert
       expect(result.isRight, true, reason: 'Expected Right but got Left');
-      expect(result.right, equals(TestData.searchResult), reason: 'Not match the expected structure');
+      expect(result.right, equals(TestData.searchResultEntities), reason: 'Not match the expected structure');
       expect(result.right, equals(TestData.searchResultByUtils), reason: 'Not match the expected structure');
       verify(mockRepository.getLocations(companyId)).called(1);
       verify(mockRepository.getAssets(companyId)).called(1);
@@ -65,15 +65,15 @@ void main() {
 
     test('should return a tree of assets when repository filterByEnergySensor', () async {
       // Arrange
-      when(mockRepository.getLocations(companyId)).thenAnswer((_) async => Right(TestData.mockLocations));
-      when(mockRepository.getAssets(companyId)).thenAnswer((_) async => Right(TestData.mockAssets));
+      when(mockRepository.getLocations(companyId)).thenAnswer((_) async => Right(TestData.mockLocationsEntity));
+      when(mockRepository.getAssets(companyId)).thenAnswer((_) async => Right(TestData.mockAssetsEntity));
 
       // Act
       final result = await useCase.filterByEnergySensor(companyId);
 
       // Assert
       expect(result.isRight, true, reason: 'Expected Right but got Left');
-      expect(result.right, equals(TestData.energySensorResult), reason: 'Not match the expected structure');
+      expect(result.right, equals(TestData.energySensorResultEntities), reason: 'Not match the expected structure');
       expect(result.right, equals(TestData.energySensorResultByUtils), reason: 'Not match the expected structure');
       verify(mockRepository.getLocations(companyId)).called(1);
       verify(mockRepository.getAssets(companyId)).called(1);
@@ -81,15 +81,15 @@ void main() {
 
     test('should return a tree of assets when repository filterByCriticalStatus', () async {
       // Arrange
-      when(mockRepository.getLocations(companyId)).thenAnswer((_) async => Right(TestData.mockLocations));
-      when(mockRepository.getAssets(companyId)).thenAnswer((_) async => Right(TestData.mockAssets));
+      when(mockRepository.getLocations(companyId)).thenAnswer((_) async => Right(TestData.mockLocationsEntity));
+      when(mockRepository.getAssets(companyId)).thenAnswer((_) async => Right(TestData.mockAssetsEntity));
 
       // Act
       final result = await useCase.filterByCriticalStatus(companyId);
 
       // Assert
       expect(result.isRight, true, reason: 'Expected Right but got Left');
-      expect(result.right, equals(TestData.criticalStatusResult), reason: 'Not match the expected structure');
+      expect(result.right, equals(TestData.criticalStatusResultEntities), reason: 'Not match the expected structure');
       expect(result.right, equals(TestData.criticalStatusResultByUtils), reason: 'Not match the expected structure');
       verify(mockRepository.getLocations(companyId)).called(1);
       verify(mockRepository.getAssets(companyId)).called(1);
@@ -98,7 +98,7 @@ void main() {
     test('should return BaseFailure when getLocations fails', () async {
       // Arrange
       when(mockRepository.getLocations(companyId)).thenAnswer((_) async => Left(UnknownFailure()));
-      when(mockRepository.getAssets(companyId)).thenAnswer((_) async => Right(TestData.mockAssets));
+      when(mockRepository.getAssets(companyId)).thenAnswer((_) async => Right(TestData.mockAssetsEntity));
 
       // Act
       final result = await useCase.getAssets(companyId);
