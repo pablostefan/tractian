@@ -53,8 +53,7 @@ void main() {
       when(mockRepository.getAssets(companyId)).thenAnswer((_) async => Right(TestData.mockAssetsEntity));
 
       // Act
-      final result = await useCase.filterBySearch(companyId, TestData.search);
-
+      final result = await useCase.filterAssets(companyId: companyId, search: TestData.search);
       // Assert
       expect(result.isRight, true, reason: 'Expected Right but got Left');
       expect(result.right, equals(TestData.searchResultEntities), reason: 'Not match the expected structure');
@@ -69,7 +68,7 @@ void main() {
       when(mockRepository.getAssets(companyId)).thenAnswer((_) async => Right(TestData.mockAssetsEntity));
 
       // Act
-      final result = await useCase.filterByEnergySensor(companyId);
+      final result = await useCase.filterAssets(companyId: companyId, isEnergySensor: true);
 
       // Assert
       expect(result.isRight, true, reason: 'Expected Right but got Left');
@@ -85,7 +84,7 @@ void main() {
       when(mockRepository.getAssets(companyId)).thenAnswer((_) async => Right(TestData.mockAssetsEntity));
 
       // Act
-      final result = await useCase.filterByCriticalStatus(companyId);
+      final result = await useCase.filterAssets(companyId: companyId, isCritical: true);
 
       // Assert
       expect(result.isRight, true, reason: 'Expected Right but got Left');
@@ -131,7 +130,7 @@ void main() {
       when(mockRepository.getAssets(companyId)).thenAnswer((_) async => Left(UnknownFailure()));
 
       // Act
-      final result = await useCase.filterBySearch(companyId, TestData.search);
+      final result = await useCase.filterAssets(companyId: companyId, search: TestData.search);
 
       // Assert
       expect(result.isLeft, true, reason: 'Expected Left but got Right');
@@ -146,7 +145,7 @@ void main() {
       when(mockRepository.getAssets(companyId)).thenAnswer((_) async => Left(UnknownFailure()));
 
       // Act
-      final result = await useCase.filterByCriticalStatus(companyId);
+      final result = await useCase.filterAssets(companyId: companyId, isCritical: true);
 
       // Assert
       expect(result.isLeft, true, reason: 'Expected Left but got Right');
@@ -161,7 +160,7 @@ void main() {
       when(mockRepository.getAssets(companyId)).thenAnswer((_) async => Left(UnknownFailure()));
 
       // Act
-      final result = await useCase.filterByEnergySensor(companyId);
+      final result = await useCase.filterAssets(companyId: companyId, isEnergySensor: true);
 
       // Assert
       expect(result.isLeft, true, reason: 'Expected Left but got Right');

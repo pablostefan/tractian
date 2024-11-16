@@ -29,7 +29,12 @@ class AssetsUseCaseImp extends BaseUseCase implements AssetsUseCase {
   }
 
   @override
-  Future<Either<BaseFailure, List<TreeEntity>>> filterBySearch(String companyId, String query) {
+  Future<Either<BaseFailure, List<TreeEntity>>> filterAssets({
+    required String companyId,
+    String search = '',
+    bool isCritical = false,
+    bool isEnergySensor = false,
+  }) async {
     return executeSafely(() async {
       var locations = await _assetsRepository.getLocations(companyId);
       var locationsList = locations.right;
@@ -39,39 +44,15 @@ class AssetsUseCaseImp extends BaseUseCase implements AssetsUseCase {
 
       final tree = TreeUtils.build(locationsList, assetsList);
 
-      final lowerCaseQuery = query.toLowerCase();
+      final lowerSearch = search.toLowerCase();
 
-      return TreeUtils.searchHierarchy(tree, (node) => node.value.name.toLowerCase().contains(lowerCaseQuery));
-    });
-  }
+      return TreeUtils.searchHierarchy(tree, (node) {
+        final isNameMatch = lowerSearch.isNotEmpty ? node.value.name.toLowerCase().contains(lowerSearch) : true;
+        final isCriticalMatch = isCritical ? node.value.componentStatus == AssetStatus.alert : true;
+        final isEnergySensorMatch = isEnergySensor ? node.value.componentSensorType == SensorType.energy : true;
 
-  @override
-  Future<Either<BaseFailure, List<TreeEntity>>> filterByEnergySensor(String companyId) {
-    return executeSafely(() async {
-      var locations = await _assetsRepository.getLocations(companyId);
-      var locationsList = locations.right;
-
-      var assets = await _assetsRepository.getAssets(companyId);
-      var assetsList = assets.right;
-
-      final tree = TreeUtils.build(locationsList, assetsList);
-
-      return TreeUtils.searchHierarchy(tree, (node) => node.value.componentSensorType == SensorType.energy);
-    });
-  }
-
-  @override
-  Future<Either<BaseFailure, List<TreeEntity>>> filterByCriticalStatus(String companyId) {
-    return executeSafely(() async {
-      var locations = await _assetsRepository.getLocations(companyId);
-      var locationsList = locations.right;
-
-      var assets = await _assetsRepository.getAssets(companyId);
-      var assetsList = assets.right;
-
-      final tree = TreeUtils.build(locationsList, assetsList);
-
-      return TreeUtils.searchHierarchy(tree, (node) => node.value.componentStatus == AssetStatus.alert);
+        return isNameMatch && isCriticalMatch && isEnergySensorMatch;
+      });
     });
   }
 }

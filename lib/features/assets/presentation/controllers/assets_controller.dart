@@ -105,65 +105,34 @@ class AssetsController extends ChangeNotifier {
 
   // Apply all active filters
   void _applyFilters() async {
-    var filteredAssets = List<TreeEntity>.from(_allAssets);
-
-    if (assetSearchController.text.isNotEmpty) {
-      filteredAssets = await _filterBySearch();
-    }
-    if (isEnergySensorSelectedNotifier.value) {
-      filteredAssets = await _filterByEnergySensor();
-    }
-    if (isCriticalSelectedNotifier.value) {
-      filteredAssets = await _filterByCriticalStatus();
-    }
-
-    if (filteredAssets != _filteredAssets) _rebuildTree(filteredAssets);
-  }
-
-  // Filter by search text
-  Future<List<TreeEntity>> _filterBySearch() async {
     _setLoading(true);
-    List<TreeEntity> tree = [];
-    final query = assetSearchController.text;
-    final result = await _assetsUseCase.filterBySearch(_companyId, query);
-    result.fold(_handleError, (response) => tree = response);
+    final result = await _assetsUseCase.filterAssets(
+      companyId: _companyId,
+      search: assetSearchController.text,
+      isCritical: isCriticalSelectedNotifier.value,
+      isEnergySensor: isEnergySensorSelectedNotifier.value,
+    );
+    result.fold(_handleError, _rebuildTree);
     _setLoading(false);
-    return tree;
-  }
-
-  // Filter by energy sensor
-  Future<List<TreeEntity>> _filterByEnergySensor() async {
-    _setLoading(true);
-    List<TreeEntity> tree = [];
-    final result = await _assetsUseCase.filterByEnergySensor(_companyId);
-    result.fold(_handleError, (response) => tree = response);
-    _setLoading(false);
-    return tree;
-  }
-
-  // Filter by critical status
-  Future<List<TreeEntity>> _filterByCriticalStatus() async {
-    _setLoading(true);
-    List<TreeEntity> tree = [];
-    final result = await _assetsUseCase.filterByCriticalStatus(_companyId);
-    result.fold(_handleError, (response) => tree = response);
-    _setLoading(false);
-    return tree;
   }
 
   // Rebuild the tree with filtered assets
   void _rebuildTree(List<TreeEntity> assets) {
-    _filteredAssets = assets;
-    treeController.roots = _filteredAssets;
-    treeController.rebuild();
+    if (assets != _filteredAssets) {
+      _filteredAssets = assets;
+      treeController.roots = _filteredAssets;
+      treeController.rebuild();
 
-    // Expand nodes if filtered
-    Future.delayed(Durations.short4, () {
-      if (_filteredAssets.length < _allAssets.length) {
-        treeController.expandCascading(_filteredAssets);
-      } else {
-        treeController.collapseCascading(_filteredAssets);
-      }
-    });
+      // Expand nodes if filtered
+      Future.delayed(Durations.short4, _toggleCascading);
+    }
+  }
+
+  void _toggleCascading() {
+    if (_filteredAssets.length < _allAssets.length) {
+      treeController.expandCascading(_filteredAssets);
+    } else {
+      treeController.collapseCascading(_filteredAssets);
+    }
   }
 }
