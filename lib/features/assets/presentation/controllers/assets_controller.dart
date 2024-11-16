@@ -5,11 +5,8 @@ import 'package:flutter_fancy_tree_view/flutter_fancy_tree_view.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:tractian/core/error/base_failure.dart';
 import 'package:tractian/core/utils/debounce_utils.dart';
-import 'package:tractian/features/assets/domain/entities/enums/assets_status.dart';
-import 'package:tractian/features/assets/domain/entities/enums/senso_type.dart';
 import 'package:tractian/features/assets/domain/entities/tree_entity.dart';
 import 'package:tractian/features/assets/domain/usecases/assets_usecase.dart';
-import 'package:tractian/features/assets/domain/utils/tree_utils.dart';
 import 'package:tractian/shared/widgets/alert_widget.dart';
 
 class AssetsController extends ChangeNotifier {
@@ -24,6 +21,8 @@ class AssetsController extends ChangeNotifier {
     super.dispose();
     assetSearchController.dispose();
   }
+
+  String _companyId = '';
 
   // Tree controller
   final TreeController<TreeEntity> treeController = TreeController<TreeEntity>(
@@ -53,12 +52,21 @@ class AssetsController extends ChangeNotifier {
   void _addSearchListener() => assetSearchController.addListener(_debounceSearch);
 
   // Fetch assets from use case
-  Future<void> fetchAssets(String companyId) async {
+  void fetchAssets(String companyId) {
+    _setCompanyId(companyId);
+    _fetchAssets(companyId);
+  }
+
+  // Fetch assets from use case
+  Future<void> _fetchAssets(String companyId) async {
     _setLoading(true);
     final result = await _assetsUseCase.getAssets(companyId);
     result.fold(_handleError, _handleAssetsFetched);
     _setLoading(false);
   }
+
+  // Set company id
+  void _setCompanyId(String companyId) => _companyId = companyId;
 
   // Handle successful asset fetching
   void _handleAssetsFetched(List<TreeEntity> response) {
@@ -96,36 +104,51 @@ class AssetsController extends ChangeNotifier {
   }
 
   // Apply all active filters
-  void _applyFilters() {
+  void _applyFilters() async {
     var filteredAssets = List<TreeEntity>.from(_allAssets);
 
     if (assetSearchController.text.isNotEmpty) {
-      filteredAssets = _filterBySearch(filteredAssets, assetSearchController.text);
+      filteredAssets = await _filterBySearch();
     }
     if (isEnergySensorSelectedNotifier.value) {
-      filteredAssets = _filterByEnergySensor(filteredAssets);
+      filteredAssets = await _filterByEnergySensor();
     }
     if (isCriticalSelectedNotifier.value) {
-      filteredAssets = _filterByCriticalStatus(filteredAssets);
+      filteredAssets = await _filterByCriticalStatus();
     }
 
     if (filteredAssets != _filteredAssets) _rebuildTree(filteredAssets);
   }
 
   // Filter by search text
-  List<TreeEntity> _filterBySearch(List<TreeEntity> assets, String query) {
-    final lowerCaseQuery = query.toLowerCase();
-    return TreeUtils.searchHierarchy(assets, (node) => node.value.name.toLowerCase().contains(lowerCaseQuery));
+  Future<List<TreeEntity>> _filterBySearch() async {
+    _setLoading(true);
+    List<TreeEntity> tree = [];
+    final query = assetSearchController.text;
+    final result = await _assetsUseCase.filterBySearch(_companyId, query);
+    result.fold(_handleError, (response) => tree = response);
+    _setLoading(false);
+    return tree;
   }
 
   // Filter by energy sensor
-  List<TreeEntity> _filterByEnergySensor(List<TreeEntity> assets) {
-    return TreeUtils.searchHierarchy(assets, (node) => node.value.componentSensorType == SensorType.energy);
+  Future<List<TreeEntity>> _filterByEnergySensor() async {
+    _setLoading(true);
+    List<TreeEntity> tree = [];
+    final result = await _assetsUseCase.filterByEnergySensor(_companyId);
+    result.fold(_handleError, (response) => tree = response);
+    _setLoading(false);
+    return tree;
   }
 
   // Filter by critical status
-  List<TreeEntity> _filterByCriticalStatus(List<TreeEntity> assets) {
-    return TreeUtils.searchHierarchy(assets, (node) => node.value.componentStatus == AssetStatus.alert);
+  Future<List<TreeEntity>> _filterByCriticalStatus() async {
+    _setLoading(true);
+    List<TreeEntity> tree = [];
+    final result = await _assetsUseCase.filterByCriticalStatus(_companyId);
+    result.fold(_handleError, (response) => tree = response);
+    _setLoading(false);
+    return tree;
   }
 
   // Rebuild the tree with filtered assets
@@ -135,10 +158,12 @@ class AssetsController extends ChangeNotifier {
     treeController.rebuild();
 
     // Expand nodes if filtered
-    if (_filteredAssets.length < _allAssets.length) {
-      Future.delayed(Durations.short4, () => treeController.expandCascading(_filteredAssets));
-    } else {
-      Future.delayed(Durations.short4, () => treeController.collapseCascading(_filteredAssets));
-    }
+    Future.delayed(Durations.short4, () {
+      if (_filteredAssets.length < _allAssets.length) {
+        treeController.expandCascading(_filteredAssets);
+      } else {
+        treeController.collapseCascading(_filteredAssets);
+      }
+    });
   }
 }

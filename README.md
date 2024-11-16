@@ -27,6 +27,12 @@ principais pastas são:
 - **Listagem de Empresas:** Exibe uma lista de empresas disponíveis.
 - **Árvore de Ativos:** Representa os ativos e localizações no formato de árvore.
 - **Busca:** Permite pesquisar por ativos ou localizações.
+- **Filtos:** Filtro para isolar sensores de energia e filtro para identificar ativos com status crítico.
+
+## Filtos
+Decidi implementar os filtros de forma dinâmica, já que os dados no servidor podem mudar constantemente. 
+Dessa forma, os filtros sempre refletirão o estado mais atualizado.
+Não encontrei nem um **status do sensor crítico**, acabei adotando o **status alert** como **critico**.
 
 ## Tecnologias Utilizadas
 
