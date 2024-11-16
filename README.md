@@ -33,6 +33,28 @@ O projeto segue uma organização modular, com separação em camadas de **dados
 - **Clean Architecture**: Organização modular em camadas independentes.
 - **Testes Unitários**: Garantia de qualidade com validação automatizada.
 
+## TreeUtils: Gerenciamento de Estruturas Hierárquicas
+
+A classe `TreeUtils` ajuda a organizar e buscar dados em hierarquias, como localizações e ativos de uma fábrica. Ela oferece duas funcionalidades principais:
+
+### **1. Construção de Árvores**
+A partir de listas planas de localizações (`LocationEntity`) e ativos (`AssetEntity`), cria uma estrutura de árvore com base nos relacionamentos (`parentId` ou `locationId`).
+
+- **Como funciona**:
+    - Identifica os nós raiz (sem pai).
+    - Conecta cada nó aos seus filhos de forma iterativa usando um mapeamento eficiente.
+
+---
+
+### **2. Busca em Árvores**
+Filtra a árvore para encontrar apenas os nós que atendem a uma condição específica, recriando a hierarquia correspondente.
+
+- **Como funciona**:
+    - Usa uma busca baseada em profundidade para verificar cada nó e seus descendentes.
+    - Retorna uma subárvore contendo apenas os resultados que atendem ao critério.
+
+---
+
 ## Instalação e Execução
 
 1. **Clone o repositório**:
