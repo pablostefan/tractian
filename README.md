@@ -51,7 +51,7 @@ O projeto segue uma organização modular, com separação em camadas de **dados
    ```
 
 4. **Configuração do Ambiente**:
-    - Crie um arquivo `.env` na raiz do projeto e adicione as variáveis de ambiente necessárias, como tokens e chaves de API.
+    - Crie um arquivo `.env` na raiz do projeto e adicione as variáveis de ambiente necessárias.
     - Exemplo de arquivo `.env`:
 
        ```plaintext
@@ -65,6 +65,8 @@ O projeto segue uma organização modular, com separação em camadas de **dados
 
 > **Nota**: O comando `--dart-define-from-file=.env` é necessário para carregar as variáveis de
 > ambiente configuradas no arquivo `.env`.
+> Embora seja recomendável adicionar o arquivo .env ao .gitignore para evitar sua inclusão no repositório, 
+> ele foi intencionalmente mantido no repositório neste caso específico para facilitar os testes.
 
 ## Estrutura de Pastas
 
@@ -95,10 +97,9 @@ O projeto inclui testes de unidade para validar a funcionalidade de partes princ
 Esses testes ajudam a garantir a estabilidade e a precisão dos componentes, como as fontes de dados
 locais e remotas. Os principais arquivos de teste incluem:
 
-- **local_movies_datasource_test.dart**: Contém testes para a camada de dados local, verificando a
-  persistência e recuperação dos dados de filmes em armazenamento local.
-- **remote_movies_datasource_test.dart**: Valida o comportamento das requisições remotas, garantindo
-  que os dados sejam corretamente buscados da API.
+- **assets_repository_test.dart**: Contém testes para a camada de repositório, verificando a interação com o data source.
+- **assets_usecase_test.dart**: Valida o comportamento do caso de uso responsável por orquestrar a lógica de construção da hierarquia de ativos e localizações.
+- **companies_repository_test.dart**: Contém testes para o repositório responsável por buscar os dados de empresas.
 
 Para executar os testes de unidade, utilize o comando abaixo:
 
