@@ -1,10 +1,12 @@
 # TRACTIAN
 
-Este é um aplicativo da TRACTIAN desenvolvido com Flutter, utilizando os princípios do **Clean Architecture**, **SOLID** e **MVC** para garantir escalabilidade, manutenibilidade e facilidade de testes.
+Este é um aplicativo da TRACTIAN desenvolvido com Flutter, utilizando os princípios do **Clean Architecture**, **SOLID**
+e **MVC** para garantir escalabilidade, manutenibilidade e facilidade de testes.
 
 ## Estrutura do Projeto
 
-O projeto segue uma organização modular, com separação em camadas de **dados**, **domínio** e **apresentação**. As principais pastas são:
+O projeto segue uma organização modular, com separação em camadas de **dados**, **domínio** e **apresentação**. As
+principais pastas são:
 
 ### lib
 
@@ -35,25 +37,26 @@ O projeto segue uma organização modular, com separação em camadas de **dados
 
 ## TreeUtils: Gerenciamento de Estruturas Hierárquicas
 
-A classe `TreeUtils` ajuda a organizar e buscar dados em hierarquias, como localizações e ativos de uma fábrica. Ela oferece duas funcionalidades principais:
+A classe `TreeUtils` ajuda a organizar e buscar dados em hierarquias, como localizações e ativos de uma fábrica. Ela
+oferece duas funcionalidades principais:
 
 ### **1. Construção de Árvores**
-A partir de listas planas de localizações (`LocationEntity`) e ativos (`AssetEntity`), cria uma estrutura de árvore com base nos relacionamentos (`parentId` ou `locationId`).
+
+A partir de listas planas de localizações (`LocationEntity`) e ativos (`AssetEntity`), cria uma estrutura de árvore com
+base nos relacionamentos (`parentId` ou `locationId`).
 
 - **Como funciona**:
     - Identifica os nós raiz (sem pai).
     - Conecta cada nó aos seus filhos de forma iterativa usando um mapeamento eficiente.
 
----
-
 ### **2. Busca em Árvores**
-Filtra a árvore para encontrar apenas os nós que atendem a uma condição específica, recriando a hierarquia correspondente.
+
+Filtra a árvore para encontrar apenas os nós que atendem a uma condição específica, recriando a hierarquia
+correspondente.
 
 - **Como funciona**:
     - Usa uma busca baseada em profundidade para verificar cada nó e seus descendentes.
     - Retorna uma subárvore contendo apenas os resultados que atendem ao critério.
-
----
 
 ## Instalação e Execução
 
@@ -87,7 +90,7 @@ Filtra a árvore para encontrar apenas os nós que atendem a uma condição espe
 
 > **Nota**: O comando `--dart-define-from-file=.env` é necessário para carregar as variáveis de
 > ambiente configuradas no arquivo `.env`.
-> Embora seja recomendável adicionar o arquivo .env ao .gitignore para evitar sua inclusão no repositório, 
+> Embora seja recomendável adicionar o arquivo .env ao .gitignore para evitar sua inclusão no repositório,
 > ele foi intencionalmente mantido no repositório neste caso específico para facilitar os testes.
 
 ## Estrutura de Pastas
@@ -119,8 +122,10 @@ O projeto inclui testes de unidade para validar a funcionalidade de partes princ
 Esses testes ajudam a garantir a estabilidade e a precisão dos componentes, como as fontes de dados
 locais e remotas. Os principais arquivos de teste incluem:
 
-- **assets_repository_test.dart**: Contém testes para a camada de repositório, verificando a interação com o data source.
-- **assets_usecase_test.dart**: Valida o comportamento do caso de uso responsável por orquestrar a lógica de construção da hierarquia de ativos e localizações.
+- **assets_repository_test.dart**: Contém testes para a camada de repositório, verificando a interação com o data
+  source.
+- **assets_usecase_test.dart**: Valida o comportamento do caso de uso responsável por orquestrar a lógica de construção
+  da hierarquia de ativos e localizações.
 - **companies_repository_test.dart**: Contém testes para o repositório responsável por buscar os dados de empresas.
 
 Para executar os testes de unidade, utilize o comando abaixo:
