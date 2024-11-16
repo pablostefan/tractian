@@ -15,7 +15,7 @@ class AssetsRepositoryImp extends BaseRepository implements AssetsRepository {
 
   @override
   Future<Either<BaseFailure, List<AssetEntity>>> getAssets(String companyId) async {
-    return tryExecute<List<AssetEntity>>(() async {
+    return executeSafely<List<AssetEntity>>(() async {
       final response = await _assetsDataSource.getAssets(companyId);
       return response.map((company) => AssetsDto.fromJson(company)).toList();
     });
@@ -23,7 +23,7 @@ class AssetsRepositoryImp extends BaseRepository implements AssetsRepository {
 
   @override
   Future<Either<BaseFailure, List<LocationEntity>>> locations(String companyId) async {
-    return tryExecute<List<LocationEntity>>(() async {
+    return executeSafely<List<LocationEntity>>(() async {
       final response = await _assetsDataSource.locations(companyId);
       return response.map((company) => LocationDto.fromJson(company)).toList();
     });

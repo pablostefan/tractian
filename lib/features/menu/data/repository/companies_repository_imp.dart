@@ -13,7 +13,7 @@ class CompaniesRepositoryImp extends BaseRepository implements CompaniesReposito
 
   @override
   Future<Either<BaseFailure, List<CompanyEntity>>> getCompanies() async {
-    return tryExecute<List<CompanyEntity>>(() async {
+    return executeSafely<List<CompanyEntity>>(() async {
       final response = await _companiesDataSource.getCompanies();
       return response.map((company) => CompanyDto.fromJson(company)).toList();
     });

@@ -1,34 +1,28 @@
 import 'package:either_dart/either.dart';
-import 'package:tractian/core/base/base_repository.dart';
+import 'package:tractian/core/base/base_usecase.dart';
 import 'package:tractian/core/error/base_failure.dart';
-import 'package:tractian/features/assets/domain/entities/asset_entity.dart';
-import 'package:tractian/features/assets/domain/entities/location_entity.dart';
-import 'package:tractian/features/assets/domain/utils/tree_utils.dart';
 import 'package:tractian/features/assets/domain/entities/tree_entity.dart';
 import 'package:tractian/features/assets/domain/repositories/assets_repository.dart';
 import 'package:tractian/features/assets/domain/usecases/assets_usecase.dart';
+import 'package:tractian/features/assets/domain/utils/tree_utils.dart';
 
-class AssetsUseCaseImp extends BaseRepository implements AssetsUseCase {
+class AssetsUseCaseImp extends BaseUseCase implements AssetsUseCase {
   final AssetsRepository _assetsRepository;
 
   AssetsUseCaseImp(this._assetsRepository);
 
   @override
   Future<Either<BaseFailure, List<TreeEntity>>> getAssets(String companyId) async {
-    return tryExecute(() async {
-      List<TreeEntity> response = [];
-
-      List<LocationEntity> locationsList = [];
+    return executeSafely(() async {
       var locations = await _assetsRepository.locations(companyId);
-      locations.fold((error) => throw error, (r) => locationsList = r);
+      var locationsList = locations.right;
 
-      List<AssetEntity> assetsList = [];
       var assets = await _assetsRepository.getAssets(companyId);
-      assets.fold((error) => throw error, (r) => assetsList = r);
+      var assetsList = assets.right;
 
-      response = TreeUtils.build(locationsList, assetsList);
+      final tree = TreeUtils.build(locationsList, assetsList);
 
-      return response;
+      return tree;
     });
   }
 }
