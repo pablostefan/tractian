@@ -6,5 +6,5 @@ import 'package:tractian/features/assets/domain/entities/location_entity.dart';
 abstract class AssetsRepository {
   Future<Either<BaseFailure, List<AssetEntity>>> getAssets(String companyId);
 
-  Future<Either<BaseFailure, List<LocationEntity>>> locations(String companyId);
+  Future<Either<BaseFailure, List<LocationEntity>>> getLocations(String companyId);
 }

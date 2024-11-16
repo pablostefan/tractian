@@ -22,9 +22,9 @@ class AssetsRepositoryImp extends BaseRepository implements AssetsRepository {
   }
 
   @override
-  Future<Either<BaseFailure, List<LocationEntity>>> locations(String companyId) async {
+  Future<Either<BaseFailure, List<LocationEntity>>> getLocations(String companyId) async {
     return executeSafely<List<LocationEntity>>(() async {
-      final response = await _assetsDataSource.locations(companyId);
+      final response = await _assetsDataSource.getLocations(companyId);
       return response.map((company) => LocationDto.fromJson(company)).toList();
     });
   }

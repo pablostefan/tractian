@@ -12,4 +12,14 @@ class LocationEntity extends TreeComponent {
   });
 
   bool get unliked => parentId == null;
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    return other is LocationEntity && other.id == id;
+  }
+
+  @override
+  int get hashCode => id.hashCode;
 }

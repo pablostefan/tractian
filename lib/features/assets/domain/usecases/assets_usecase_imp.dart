@@ -14,7 +14,7 @@ class AssetsUseCaseImp extends BaseUseCase implements AssetsUseCase {
   @override
   Future<Either<BaseFailure, List<TreeEntity>>> getAssets(String companyId) async {
     return executeSafely(() async {
-      var locations = await _assetsRepository.locations(companyId);
+      var locations = await _assetsRepository.getLocations(companyId);
       var locationsList = locations.right;
 
       var assets = await _assetsRepository.getAssets(companyId);

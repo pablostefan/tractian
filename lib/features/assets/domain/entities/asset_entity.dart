@@ -19,4 +19,14 @@ class AssetEntity extends TreeComponent {
   }) : super(type: ComponentType.fromSensorType(sensorType));
 
   bool get unliked => locationId == null && parentId == null;
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    return other is AssetEntity && other.id == id;
+  }
+
+  @override
+  int get hashCode => id.hashCode;
 }
