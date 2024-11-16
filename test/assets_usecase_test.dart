@@ -61,7 +61,7 @@ void main() {
       // Assert
       expect(result.isRight, true, reason: 'Expected Right but got Left');
       expect(result.right, equals(mockTree), reason: 'The returned tree does not match the expected structure');
-      expect(mockTree, equals(mockTreeByUtils), reason: 'The returned tree does not match the expected structure');
+      expect(result.right, equals(mockTreeByUtils), reason: 'The returned tree does not match the expected structure');
       verify(mockRepository.getLocations(companyId)).called(1);
       verify(mockRepository.getAssets(companyId)).called(1);
     });

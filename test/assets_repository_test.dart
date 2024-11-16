@@ -6,6 +6,8 @@ import 'package:tractian/features/assets/data/datasources/assets_datasource.dart
 import 'package:tractian/features/assets/data/dtos/asset_dto.dart';
 import 'package:tractian/features/assets/data/dtos/location_dto.dart';
 import 'package:tractian/features/assets/data/repositories/assets_repository_imp.dart';
+import 'package:tractian/features/assets/domain/entities/asset_entity.dart';
+import 'package:tractian/features/assets/domain/entities/location_entity.dart';
 
 import 'assets_repository_test.mocks.dart';
 
@@ -31,6 +33,19 @@ void main() {
 
       final mockLocations = mockLocationsJson.map((json) => LocationDto.fromJson(json)).toList();
 
+      final mockLocationsEntity = [
+        LocationEntity(
+          id: "656a07b3f2d4a1001e2144bf",
+          name: "CHARCOAL STORAGE SECTOR",
+          parentId: "65674204664c41001e91ecb4",
+        ),
+        LocationEntity(
+          id: "656733611f4664001f295dd0",
+          name: "Empty Machine house",
+          parentId: null,
+        )
+      ];
+
       when(mockDataSource.getLocations(companyId)).thenAnswer((_) async => mockLocationsJson);
 
       // Act
@@ -39,6 +54,7 @@ void main() {
       // Assert
       expect(result.isRight, true, reason: 'Expected Right but got Left');
       expect(result.right, equals(mockLocations), reason: 'The returned locations are incorrect');
+      expect(result.right, equals(mockLocationsEntity), reason: 'The returned locations are incorrect');
       verify(mockDataSource.getLocations(companyId)).called(1);
     });
 
@@ -82,6 +98,29 @@ void main() {
 
       final mockAssets = mockAssetsJson.map((json) => AssetsDto.fromJson(json)).toList();
 
+      final mockAssetsEntity = [
+        AssetEntity(
+          gatewayId: "HND116",
+          id: "6092c987507faf0064b0a7bb",
+          locationId: "6092c8f567679000665ed5d2",
+          name: "Sensor 1 - energy",
+          parentId: null,
+          sensorId: "OOJ718",
+          sensorType: "energy",
+          status: "operating",
+        ),
+        AssetEntity(
+          gatewayId: "ROL916",
+          id: "6080f10e98ac51001e7d77eb",
+          locationId: "607a11a07a51520020945cd6",
+          name: "Sensor 2 - energy",
+          parentId: null,
+          sensorId: "OYL361",
+          sensorType: "energy",
+          status: "operating",
+        )
+      ];
+
       when(mockDataSource.getAssets(companyId)).thenAnswer((_) async => mockAssetsJson);
 
       // Act
@@ -90,6 +129,7 @@ void main() {
       // Assert
       expect(result.isRight, true, reason: 'Expected Right but got Left');
       expect(result.right, equals(mockAssets), reason: 'The returned assets are incorrect');
+      expect(result.right, equals(mockAssetsEntity), reason: 'The returned assets are incorrect');
       verify(mockDataSource.getAssets(companyId)).called(1);
     });
 
