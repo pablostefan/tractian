@@ -39,7 +39,7 @@ abstract class TreeUtils {
     return currentTreeNode;
   }
 
-  static List<TreeEntity> searchInForest(List<TreeEntity> forest, bool Function(TreeEntity) condition) {
+  static List<TreeEntity> searchHierarchy(List<TreeEntity> forest, bool Function(TreeEntity) condition) {
     final results = <TreeEntity>[];
 
     for (final tree in forest) {

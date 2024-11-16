@@ -111,17 +111,17 @@ class AssetsController extends ChangeNotifier {
   // Filter by search text
   List<TreeEntity> _filterBySearch(List<TreeEntity> assets, String query) {
     final lowerCaseQuery = query.toLowerCase();
-    return TreeUtils.searchInForest(assets, (node) => node.value.name.toLowerCase().contains(lowerCaseQuery));
+    return TreeUtils.searchHierarchy(assets, (node) => node.value.name.toLowerCase().contains(lowerCaseQuery));
   }
 
   // Filter by energy sensor
   List<TreeEntity> _filterByEnergySensor(List<TreeEntity> assets) {
-    return TreeUtils.searchInForest(assets, (node) => node.value.componentSensorType == SensorType.energy);
+    return TreeUtils.searchHierarchy(assets, (node) => node.value.componentSensorType == SensorType.energy);
   }
 
   // Filter by critical status
   List<TreeEntity> _filterByCriticalStatus(List<TreeEntity> assets) {
-    return TreeUtils.searchInForest(assets, (node) => node.value.componentStatus == AssetStatus.alert);
+    return TreeUtils.searchHierarchy(assets, (node) => node.value.componentStatus == AssetStatus.alert);
   }
 
   // Rebuild the tree with filtered assets
@@ -134,7 +134,7 @@ class AssetsController extends ChangeNotifier {
     if (_filteredAssets.length < _allAssets.length) {
       Future.delayed(Durations.short4, () => treeController.expandCascading(_filteredAssets));
     } else {
-      treeController.collapseAll();
+      Future.delayed(Durations.short4, () => treeController.collapseCascading(_filteredAssets));
     }
   }
 }
