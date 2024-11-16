@@ -60,40 +60,38 @@ abstract class TreeUtils {
     return rootNodes;
   }
 
-  /// Searches the tree structure for nodes that match a given condition.
-  /// Returns the matching subtrees, preserving their structure.
-  static List<TreeEntity> searchHierarchy(
-    List<TreeEntity> forest,
-    bool Function(TreeEntity) condition,
-  ) {
+  static List<TreeEntity> searchHierarchy(List<TreeEntity> forest, bool Function(TreeEntity) condition) {
     final results = <TreeEntity>[];
 
+    // Iterate through all root nodes in the forest
     for (final root in forest) {
-      final queue = <TreeEntity>[]; // Queue for iterative processing.
-      final matchingChildren = <TreeEntity>[]; // Collect matched children.
-
-      // Add the root node to the queue for processing.
-      queue.add(root);
-
-      // Process the tree iteratively.
-      while (queue.isNotEmpty) {
-        final current = queue.removeAt(0);
-
-        // Check if the current node matches the condition.
-        if (condition(current)) {
-          matchingChildren.add(current); // Add to matching children if it matches.
-        } else {
-          // If the current node doesn't match, process its children.
-          queue.addAll(current.children);
-        }
-      }
-
-      // If matching children were found, recreate the subtree with matched children.
-      if (matchingChildren.isNotEmpty) {
-        results.add(TreeEntity(value: root.value, children: matchingChildren));
-      }
+      // Recreate the subtree with matching nodes using a helper function
+      final matchingSubtree = _searchSubtree(root, condition);
+      if (matchingSubtree != null) results.add(matchingSubtree);
     }
 
     return results;
+  }
+
+  /// Helper function to recursively search and rebuild the subtree
+  /// containing only nodes that match the condition or have matching descendants.
+  static TreeEntity? _searchSubtree(TreeEntity node, bool Function(TreeEntity) condition) {
+    // Check if the current node matches the condition
+    final matches = condition(node);
+
+    // List to collect children that match the condition or have matching descendants
+    final matchingChildren = <TreeEntity>[];
+
+    // Process each child recursively
+    for (final child in node.children) {
+      final matchingChild = _searchSubtree(child, condition);
+      if (matchingChild != null) matchingChildren.add(matchingChild); // Add matching child to the list
+    }
+
+    // If the current node matches or has matching children, rebuild the node
+    if (matches || matchingChildren.isNotEmpty) return TreeEntity(value: node.value, children: matchingChildren);
+
+    // If neither the node nor its children match, return null
+    return null;
   }
 }
