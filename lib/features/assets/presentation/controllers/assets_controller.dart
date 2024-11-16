@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_fancy_tree_view/flutter_fancy_tree_view.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:tractian/core/error/base_failure.dart';
+import 'package:tractian/core/utils/debounce_utils.dart';
 import 'package:tractian/features/assets/domain/entities/enums/assets_status.dart';
 import 'package:tractian/features/assets/domain/entities/enums/senso_type.dart';
 import 'package:tractian/features/assets/domain/entities/tree_entity.dart';
@@ -49,7 +50,7 @@ class AssetsController extends ChangeNotifier {
   void _setLoading(bool value) => isLoadingNotifier.value = value;
 
   // Add listener to search controller
-  void _addSearchListener() => assetSearchController.addListener(_applyFilters);
+  void _addSearchListener() => assetSearchController.addListener(_debounceSearch);
 
   // Fetch assets from use case
   Future<void> fetchAssets(String companyId) async {
@@ -67,6 +68,9 @@ class AssetsController extends ChangeNotifier {
     treeController.rebuild();
     notifyListeners();
   }
+
+  // Debounce search filter
+  void _debounceSearch() => Debounce.call(_applyFilters);
 
   // Handle error during fetching
   void _handleError(BaseFailure failure) {
@@ -105,7 +109,7 @@ class AssetsController extends ChangeNotifier {
       filteredAssets = _filterByCriticalStatus(filteredAssets);
     }
 
-    _rebuildTree(filteredAssets);
+    if (filteredAssets != _filteredAssets) _rebuildTree(filteredAssets);
   }
 
   // Filter by search text
