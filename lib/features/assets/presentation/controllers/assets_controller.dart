@@ -36,11 +36,10 @@ class AssetsController extends ChangeNotifier {
   final ValueNotifier<bool> isEnergySensorSelectedNotifier = ValueNotifier(false);
 
   // Asset tree data
-  final List<TreeEntity> _allAssets = [];
-  List<TreeEntity> _filteredAssets = [];
+  List<TreeEntity> _treeAssets = [];
 
   // External access to the filtered tree
-  UnmodifiableListView<TreeEntity> get visibleAssets => UnmodifiableListView(_filteredAssets);
+  UnmodifiableListView<TreeEntity> get visibleAssets => UnmodifiableListView(_treeAssets);
 
   // Search controller
   final TextEditingController assetSearchController = TextEditingController();
@@ -70,15 +69,16 @@ class AssetsController extends ChangeNotifier {
 
   // Handle successful asset fetching
   void _handleAssetsFetched(List<TreeEntity> response) {
-    _allAssets.addAll(response);
-    _filteredAssets = List.from(response);
-    treeController.roots = _allAssets;
+    _treeAssets = List.from(response);
+    treeController.roots = List.from(response);
     treeController.rebuild();
     notifyListeners();
   }
 
   // Debounce search filter
-  void _debounceSearch() => Debounce.call(_applyFilters);
+  void _debounceSearch() {
+    if (assetSearchController.text.isNotEmpty) Debounce.call(_applyFilters);
+  }
 
   // Handle error during fetching
   void _handleError(BaseFailure failure) {
@@ -105,7 +105,6 @@ class AssetsController extends ChangeNotifier {
 
   // Apply all active filters
   void _applyFilters() async {
-    _setLoading(true);
     final result = await _assetsUseCase.filterAssets(
       companyId: _companyId,
       search: assetSearchController.text,
@@ -113,14 +112,13 @@ class AssetsController extends ChangeNotifier {
       isEnergySensor: isEnergySensorSelectedNotifier.value,
     );
     result.fold(_handleError, _rebuildTree);
-    _setLoading(false);
   }
 
   // Rebuild the tree with filtered assets
   void _rebuildTree(List<TreeEntity> assets) {
-    if (assets != _filteredAssets) {
-      _filteredAssets = assets;
-      treeController.roots = _filteredAssets;
+    if (assets != _treeAssets) {
+      _treeAssets = assets;
+      treeController.roots = _treeAssets;
       treeController.rebuild();
 
       // Expand nodes if filtered
@@ -129,10 +127,14 @@ class AssetsController extends ChangeNotifier {
   }
 
   void _toggleCascading() {
-    if (_filteredAssets.length < _allAssets.length) {
-      treeController.expandCascading(_filteredAssets);
+    bool searchActive = assetSearchController.text.isNotEmpty;
+    bool criticalActive = isCriticalSelectedNotifier.value;
+    bool energyActive = isEnergySensorSelectedNotifier.value;
+
+    if (searchActive || criticalActive || energyActive) {
+      treeController.expandCascading(_treeAssets);
     } else {
-      treeController.collapseCascading(_filteredAssets);
+      treeController.collapseCascading(_treeAssets);
     }
   }
 }
