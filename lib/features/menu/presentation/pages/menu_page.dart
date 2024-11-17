@@ -7,6 +7,7 @@ import 'package:tractian/core/routes/app_route.dart';
 import 'package:tractian/features/menu/presentation/controllers/menu_controller.dart';
 import 'package:tractian/features/menu/presentation/widgets/companies_widget/companies_list_widget.dart';
 import 'package:tractian/shared/assets/svgs/app_svgs.dart';
+import 'package:tractian/shared/ui/app_colors.dart';
 
 class MenuPage extends StatefulWidget {
   const MenuPage({super.key});
@@ -26,14 +27,18 @@ class _MenuPageState extends State<MenuPage> {
         centerTitle: true,
         title: SvgPicture.asset(AppSvgs.ic_logo.path),
       ),
-      body: ValueListenableBuilder(
-        valueListenable: _controller.isLoadingNotifier,
-        builder: (context, value, child) => ModalProgressHUD(inAsyncCall: value, child: child!),
-        child: ListenableBuilder(
-          listenable: _controller,
-          builder: (context, child) => CompaniesListWidget(
-            companies: _controller.companies,
-            onTapCompany: (company) => GoRouter.of(context).pushNamed(AppRoute.assets.name, extra: company.id),
+      body: RefreshIndicator(
+        color: AppColors.refreshIndicator,
+        onRefresh: () async => _controller.fetchCompanies(),
+        child: ValueListenableBuilder(
+          valueListenable: _controller.isLoadingNotifier,
+          builder: (context, value, child) => ModalProgressHUD(inAsyncCall: value, child: child!),
+          child: ListenableBuilder(
+            listenable: _controller,
+            builder: (context, child) => CompaniesListWidget(
+              companies: _controller.companies,
+              onTapCompany: (company) => GoRouter.of(context).pushNamed(AppRoute.assets.name, extra: company.id),
+            ),
           ),
         ),
       ),

@@ -11,7 +11,7 @@ class AppMenuController extends ChangeNotifier {
   final CompaniesUseCase _companiesUseCase;
 
   AppMenuController(this._companiesUseCase) {
-    _fetchCompanies();
+    fetchCompanies();
   }
 
   // State management
@@ -26,7 +26,7 @@ class AppMenuController extends ChangeNotifier {
   void _setLoading(bool value) => isLoadingNotifier.value = value;
 
   // Fetch companies from use case
-  Future<void> _fetchCompanies() async {
+  Future<void> fetchCompanies() async {
     _setLoading(true);
     final result = await _companiesUseCase.getCompanies();
     result.fold(_handleError, _handleCompaniesFetched);

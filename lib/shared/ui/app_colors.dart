@@ -9,6 +9,8 @@ abstract class AppColors {
 
   static const Color primaryTextField = Color.fromRGBO(234, 239, 243, 1);
 
+  static const Color refreshIndicator = Color.fromRGBO(23, 25, 45, 1);
+
   static const Color primaryText = Colors.white;
   static const Color secondaryText = Color.fromRGBO(23, 25, 45, 1);
   static const Color tertiaryText = Color.fromRGBO(119, 129, 140, 1);
@@ -28,7 +30,6 @@ abstract class AppColors {
 
   static const Color border = Color.fromRGBO(216, 223, 230, 1);
   static const Color divider = Color.fromRGBO(234, 238, 242, 1);
-
 
   static const Color success = Color.fromRGBO(82, 196, 26, 1);
   static const Color error = Color.fromRGBO(237, 56, 51, 1);

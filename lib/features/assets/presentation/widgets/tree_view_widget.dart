@@ -16,17 +16,15 @@ class TreeViewWidget extends StatefulWidget {
 class TreeViewWidgetState extends State<TreeViewWidget> {
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: AnimatedTreeView<TreeEntity>(
-        treeController: widget.treeController,
-        padding: const EdgeInsets.symmetric(horizontal: AppDimens.micro, vertical: AppDimens.xxs),
-        nodeBuilder: (context, entry) {
-          return InkWell(
-            onTap: () => widget.treeController.toggleExpansion(entry.node),
-            child: TreeItemWidget(entry: entry),
-          );
-        },
-      ),
+    return AnimatedTreeView<TreeEntity>(
+      treeController: widget.treeController,
+      padding: const EdgeInsets.symmetric(horizontal: AppDimens.micro, vertical: AppDimens.xxs),
+      nodeBuilder: (context, entry) {
+        return InkWell(
+          onTap: () => widget.treeController.toggleExpansion(entry.node),
+          child: TreeItemWidget(entry: entry),
+        );
+      },
     );
   }
 }

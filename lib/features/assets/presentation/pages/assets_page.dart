@@ -49,7 +49,13 @@ class _AssetsPageState extends State<AssetsPage> {
             ),
             ListenableBuilder(
               listenable: _controller,
-              builder: (_, __) => TreeViewWidget(treeController: _controller.treeController),
+              builder: (_, __) => Expanded(
+                child: RefreshIndicator(
+                  color: AppColors.refreshIndicator,
+                  onRefresh: () async => _controller.fetchAssets(widget.companyId),
+                  child: TreeViewWidget(treeController: _controller.treeController),
+                ),
+              ),
             ),
           ],
         ),
