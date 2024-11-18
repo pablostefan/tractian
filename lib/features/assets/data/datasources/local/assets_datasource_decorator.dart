@@ -1,17 +1,17 @@
 import 'package:tractian/features/assets/data/datasources/assets_datasource.dart';
 
 class AssetsDataSourceDecorator implements AssetsDataSource {
-  final AssetsDataSource _assetsDataSource;
+  final AssetsDataSource assetsDataSource;
 
-  AssetsDataSourceDecorator(this._assetsDataSource);
+  AssetsDataSourceDecorator(this.assetsDataSource);
 
   @override
-  Future<List<Map<String, dynamic>>> getAssets(String companyId) {
-    return _assetsDataSource.getAssets(companyId);
+  Future<List<dynamic>> getAssets(String companyId) {
+    return assetsDataSource.getAssets(companyId);
   }
 
   @override
-  Future<List<Map<String, dynamic>>> getLocations(String companyId) {
-    return _assetsDataSource.getLocations(companyId);
+  Future<List<dynamic>> getLocations(String companyId) {
+    return assetsDataSource.getLocations(companyId);
   }
 }

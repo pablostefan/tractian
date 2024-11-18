@@ -2,13 +2,13 @@ import 'package:tractian/core/error/base_failure.dart';
 import 'package:tractian/core/infra/local_storage/local_storage_service.dart';
 import 'package:tractian/features/assets/data/datasources/local/assets_datasource_decorator.dart';
 
-class AssetsLocalDataSourceDecoratorImp extends AssetsDataSourceDecorator {
+class AssetsLocalDataSourceImp extends AssetsDataSourceDecorator {
   final LocalStorageService _localStorageService;
 
-  AssetsLocalDataSourceDecoratorImp(super._assetsDataSource, this._localStorageService);
+  AssetsLocalDataSourceImp(super.assetsDataSource, this._localStorageService);
 
   @override
-  Future<List<Map<String, dynamic>>> getAssets(String companyId) async {
+  Future<List<dynamic>> getAssets(String companyId) async {
     final String cacheKey = companyId;
     try {
       final assetsResponse = await super.getAssets(companyId);
@@ -22,10 +22,10 @@ class AssetsLocalDataSourceDecoratorImp extends AssetsDataSourceDecorator {
   }
 
   @override
-  Future<List<Map<String, dynamic>>> getLocations(String companyId) async {
+  Future<List<dynamic>> getLocations(String companyId) async {
     final String cacheKey = companyId;
     try {
-      final assetsResponse = await super.getLocations(companyId);
+      var assetsResponse = await super.getLocations(companyId);
       await _localStorageService.putData(cacheKey, assetsResponse);
       return assetsResponse;
     } on NetworkFailure {

@@ -14,7 +14,8 @@ import 'package:tractian/features/assets/domain/usecases/assets_usecase.dart';
 import 'package:tractian/features/assets/domain/usecases/assets_usecase_imp.dart';
 import 'package:tractian/features/assets/presentation/controllers/assets_controller.dart';
 import 'package:tractian/features/menu/data/datasources/companies_datasource.dart';
-import 'package:tractian/features/menu/data/datasources/companies_datasource_imp.dart';
+import 'package:tractian/features/menu/data/datasources/local/companies_local_datasource_decorator_imp.dart';
+import 'package:tractian/features/menu/data/datasources/remote/companies_datasource_imp.dart';
 import 'package:tractian/features/menu/data/repositories/companies_repository_imp.dart';
 import 'package:tractian/features/menu/domain/repositories/companies_repository.dart';
 import 'package:tractian/features/menu/domain/usecases/companies_usecase.dart';
@@ -26,19 +27,22 @@ class Injection {
     GetIt getIt = GetIt.instance;
 
     // core
-    getIt.registerLazySingleton<Dio>(() => Dio(BaseOptions(baseUrl: API.baseUrl)));
+    getIt.registerLazySingleton<Dio>(() => Dio(BaseOptions(
+        baseUrl: API.baseUrl, connectTimeout: const Duration(seconds: 1), receiveTimeout: const Duration(seconds: 1))));
+
     getIt.registerLazySingleton<HttpService>(() => DioHttpServiceImp(getIt()));
     getIt.registerLazySingleton<LocalStorageService>(() => SharedPreferencesLocalStorageService());
 
     // menu
-    getIt.registerLazySingleton<CompaniesDataSource>(() => CompaniesDatasourceImp(getIt()));
+    getIt.registerLazySingleton<CompaniesDataSource>(
+        () => CompaniesLocalDataSourceImp(CompaniesDatasourceImp(getIt()), getIt()));
     getIt.registerLazySingleton<CompaniesRepository>(() => CompaniesRepositoryImp(getIt()));
     getIt.registerLazySingleton<CompaniesUseCase>(() => CompaniesUseCaseImp(getIt()));
     getIt.registerLazySingleton<AppMenuController>(() => AppMenuController(getIt()));
 
     // assets
     getIt.registerLazySingleton<AssetsDataSource>(
-        () => AssetsLocalDataSourceDecoratorImp(AssetsDatasourceImp(getIt()), getIt()));
+        () => AssetsLocalDataSourceImp(AssetsRemoteDatasourceImp(getIt()), getIt()));
     getIt.registerLazySingleton<AssetsRepository>(() => AssetsRepositoryImp(getIt()));
     getIt.registerLazySingleton<AssetsUseCase>(() => AssetsUseCaseImp(getIt()));
     getIt.registerFactory<AssetsController>(() => AssetsController(getIt()));

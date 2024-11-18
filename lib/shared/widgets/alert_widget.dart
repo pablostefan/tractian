@@ -42,9 +42,10 @@ class AlertWidget extends StatelessWidget {
                 ]),
                 child: Row(children: [
                   Icon(type.icon, color: AppColors.monoWhite),
-                  Padding(
-                      padding: const EdgeInsets.only(left: AppDimens.nano),
-                      child: Text(message).bodySmallMedium().color(AppColors.monoWhite))
+                  Expanded(
+                      child: Padding(
+                          padding: const EdgeInsets.only(left: AppDimens.nano),
+                          child: Text(message).bodySmallMedium().color(AppColors.monoWhite)))
                 ]))));
   }
 }
