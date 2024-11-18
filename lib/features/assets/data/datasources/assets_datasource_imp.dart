@@ -12,8 +12,8 @@ class AssetsDatasourceImp implements AssetsDataSource {
     try {
       final response = await _httpService.get("/companies/$companyId/assets");
       return response.data;
-    } catch (e) {
-      throw NetworkFailure(message: "Falha ao buscar os ativos");
+    } catch (e, s) {
+      throw NetworkFailure(message: "Falha ao buscar os ativos", stackTrace: s);
     }
   }
 
@@ -22,8 +22,8 @@ class AssetsDatasourceImp implements AssetsDataSource {
     try {
       final response = await _httpService.get("/companies/$companyId/locations");
       return response.data;
-    } catch (e) {
-      throw NetworkFailure(message: "Falha ao buscar os locais");
+    } catch (e, s) {
+      throw NetworkFailure(message: "Falha ao buscar os ativos", stackTrace: s);
     }
   }
 }
