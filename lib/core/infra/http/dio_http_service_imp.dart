@@ -17,7 +17,7 @@ class DioHttpServiceImp implements HttpService {
     } on DioException catch (e) {
       throw NetworkFailure.fromDioException(e);
     } catch (e, s) {
-      throw UnknownFailure(stackTrace: s);
+      throw NetworkFailure(message: "Erro ao buscar dados", stackTrace: s);
     }
   }
 }
