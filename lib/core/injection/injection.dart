@@ -4,7 +4,7 @@ import 'package:tractian/core/infra/http/dio_http_service_imp.dart';
 import 'package:tractian/core/infra/http/http_service.dart';
 import 'package:tractian/core/utils/api_utils.dart';
 import 'package:tractian/features/assets/data/datasources/assets_datasource.dart';
-import 'package:tractian/features/assets/data/datasources/assets_datasource_imp.dart';
+import 'package:tractian/features/assets/data/datasources/remote/assets_datasource_imp.dart';
 import 'package:tractian/features/assets/data/repositories/assets_repository_imp.dart';
 import 'package:tractian/features/assets/domain/repositories/assets_repository.dart';
 import 'package:tractian/features/assets/domain/usecases/assets_usecase.dart';

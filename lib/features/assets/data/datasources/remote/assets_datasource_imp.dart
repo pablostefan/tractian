@@ -7,13 +7,13 @@ class AssetsDatasourceImp implements AssetsDataSource {
   AssetsDatasourceImp(this._httpService);
 
   @override
-  Future<List<dynamic>> getAssets(String companyId) async {
+  Future<List<Map<String, dynamic>>> getAssets(String companyId) async {
     final response = await _httpService.get("/companies/$companyId/assets");
     return response.data;
   }
 
   @override
-  Future<List<dynamic>> getLocations(String companyId) async {
+  Future<List<Map<String, dynamic>>> getLocations(String companyId) async {
     final response = await _httpService.get("/companies/$companyId/locations");
     return response.data;
   }

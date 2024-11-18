@@ -60,3 +60,7 @@ class UnknownFailure extends BaseFailure {
 class UseCaseFailure extends BaseFailure {
   UseCaseFailure({required super.message, super.stackTrace});
 }
+
+class CacheDataFailure extends BaseFailure {
+  CacheDataFailure({required super.message, super.stackTrace});
+}
