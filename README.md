@@ -28,6 +28,9 @@ principais pastas são:
 - **Árvore de Ativos:** Representa os ativos e localizações no formato de árvore.
 - **Busca:** Permite pesquisar por ativos ou localizações.
 - **Filtos:** Filtro para isolar sensores de energia e filtro para identificar ativos com status crítico.
+- **Cache Offline usando Decorator Pattern**: Implementação de cache para operações offline,
+    utilizando o Decorator Pattern, que permite armazenar e recuperar dados locais quando não há conexão com a internet,
+    proporcionando uma experiência de usuário contínua.
 
 ## Filtos
 Decidi implementar os filtros de forma dinâmica, já que os dados no servidor podem mudar constantemente. 
@@ -41,6 +44,7 @@ Não encontrei nem um **status do sensor crítico**, acabei adotando o **status 
 - [**GoRouter**](https://pub.dev/packages/go_router): Gerenciamento de rotas.
 - [**Either**](https://pub.dev/packages/either_dart): Tratamento de erros.
 - [**GetIt**](https://pub.dev/packages/get_it): Injeção de dependência.
+- [**Shared Preferences**](https://pub.dev/packages/shared_preferences): Armazenamento local de dados leves.
 - **Clean Architecture**: Organização modular em camadas independentes.
 - **Testes Unitários**: Garantia de qualidade com validação automatizada.
 
