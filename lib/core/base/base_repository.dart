@@ -3,8 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:tractian/core/error/base_failure.dart';
 
 abstract class BaseRepository {
-  Future<Either<BaseFailure, T>> executeSafely<T>(
-      Future<T> Function() exec) async {
+  Future<Either<BaseFailure, T>> executeSafely<T>(Future<T> Function() exec) async {
     try {
       T result = await exec();
       return Right(result);
