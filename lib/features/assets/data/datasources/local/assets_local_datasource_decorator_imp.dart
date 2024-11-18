@@ -5,7 +5,7 @@ import 'package:tractian/features/assets/data/datasources/local/assets_datasourc
 class AssetsLocalDataSourceDecoratorImp extends AssetsDataSourceDecorator {
   final LocalStorageService _localStorageService;
 
-  AssetsLocalDataSourceDecoratorImp(super.assetsDataSource, this._localStorageService);
+  AssetsLocalDataSourceDecoratorImp(super._assetsDataSource, this._localStorageService);
 
   @override
   Future<List<Map<String, dynamic>>> getAssets(String companyId) async {

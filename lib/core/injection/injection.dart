@@ -2,8 +2,11 @@ import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
 import 'package:tractian/core/infra/http/dio_http_service_imp.dart';
 import 'package:tractian/core/infra/http/http_service.dart';
+import 'package:tractian/core/infra/local_storage/local_storage_service.dart';
+import 'package:tractian/core/infra/local_storage/shared_preferences_local_storage_service_imp.dart';
 import 'package:tractian/core/utils/api_utils.dart';
 import 'package:tractian/features/assets/data/datasources/assets_datasource.dart';
+import 'package:tractian/features/assets/data/datasources/local/assets_local_datasource_decorator_imp.dart';
 import 'package:tractian/features/assets/data/datasources/remote/assets_datasource_imp.dart';
 import 'package:tractian/features/assets/data/repositories/assets_repository_imp.dart';
 import 'package:tractian/features/assets/domain/repositories/assets_repository.dart';
@@ -25,6 +28,7 @@ class Injection {
     // core
     getIt.registerLazySingleton<Dio>(() => Dio(BaseOptions(baseUrl: API.baseUrl)));
     getIt.registerLazySingleton<HttpService>(() => DioHttpServiceImp(getIt()));
+    getIt.registerLazySingleton<LocalStorageService>(() => SharedPreferencesLocalStorageService());
 
     // menu
     getIt.registerLazySingleton<CompaniesDataSource>(() => CompaniesDatasourceImp(getIt()));
@@ -33,7 +37,8 @@ class Injection {
     getIt.registerLazySingleton<AppMenuController>(() => AppMenuController(getIt()));
 
     // assets
-    getIt.registerLazySingleton<AssetsDataSource>(() => AssetsDatasourceImp(getIt()));
+    getIt.registerLazySingleton<AssetsDataSource>(
+        () => AssetsLocalDataSourceDecoratorImp(AssetsDatasourceImp(getIt()), getIt()));
     getIt.registerLazySingleton<AssetsRepository>(() => AssetsRepositoryImp(getIt()));
     getIt.registerLazySingleton<AssetsUseCase>(() => AssetsUseCaseImp(getIt()));
     getIt.registerFactory<AssetsController>(() => AssetsController(getIt()));

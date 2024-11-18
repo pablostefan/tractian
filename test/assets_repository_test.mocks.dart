@@ -27,23 +27,28 @@ import 'package:tractian/features/assets/data/datasources/assets_datasource.dart
 /// See the documentation for Mockito's code generation for more information.
 class MockAssetsDataSource extends _i1.Mock implements _i2.AssetsDataSource {
   @override
-  _i3.Future<List<dynamic>> getAssets(String? companyId) => (super.noSuchMethod(
+  _i3.Future<List<Map<String, dynamic>>> getAssets(String? companyId) =>
+      (super.noSuchMethod(
         Invocation.method(
           #getAssets,
           [companyId],
         ),
-        returnValue: _i3.Future<List<dynamic>>.value(<dynamic>[]),
-        returnValueForMissingStub: _i3.Future<List<dynamic>>.value(<dynamic>[]),
-      ) as _i3.Future<List<dynamic>>);
+        returnValue: _i3.Future<List<Map<String, dynamic>>>.value(
+            <Map<String, dynamic>>[]),
+        returnValueForMissingStub: _i3.Future<List<Map<String, dynamic>>>.value(
+            <Map<String, dynamic>>[]),
+      ) as _i3.Future<List<Map<String, dynamic>>>);
 
   @override
-  _i3.Future<List<dynamic>> getLocations(String? companyId) =>
+  _i3.Future<List<Map<String, dynamic>>> getLocations(String? companyId) =>
       (super.noSuchMethod(
         Invocation.method(
           #getLocations,
           [companyId],
         ),
-        returnValue: _i3.Future<List<dynamic>>.value(<dynamic>[]),
-        returnValueForMissingStub: _i3.Future<List<dynamic>>.value(<dynamic>[]),
-      ) as _i3.Future<List<dynamic>>);
+        returnValue: _i3.Future<List<Map<String, dynamic>>>.value(
+            <Map<String, dynamic>>[]),
+        returnValueForMissingStub: _i3.Future<List<Map<String, dynamic>>>.value(
+            <Map<String, dynamic>>[]),
+      ) as _i3.Future<List<Map<String, dynamic>>>);
 }
