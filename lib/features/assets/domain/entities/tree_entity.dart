@@ -8,8 +8,6 @@ class TreeEntity {
 
   @override
   bool operator ==(Object other) {
-    if (identical(this, other)) return true;
-
     return other is TreeEntity && other.value.id == value.id;
   }
 

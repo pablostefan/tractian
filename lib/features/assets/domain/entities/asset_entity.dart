@@ -22,8 +22,6 @@ class AssetEntity extends TreeComponent {
 
   @override
   bool operator ==(Object other) {
-    if (identical(this, other)) return true;
-
     return other is AssetEntity && other.id == id;
   }
 

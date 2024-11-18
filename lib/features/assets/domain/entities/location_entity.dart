@@ -15,8 +15,6 @@ class LocationEntity extends TreeComponent {
 
   @override
   bool operator ==(Object other) {
-    if (identical(this, other)) return true;
-
     return other is LocationEntity && other.id == id;
   }
 

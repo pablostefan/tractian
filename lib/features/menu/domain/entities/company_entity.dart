@@ -6,8 +6,6 @@ class CompanyEntity {
 
   @override
   bool operator ==(Object other) {
-    if (identical(this, other)) return true;
-
     return other is CompanyEntity && other.id == id;
   }
 
