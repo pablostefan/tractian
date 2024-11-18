@@ -1,3 +1,4 @@
+import 'package:tractian/core/error/base_failure.dart';
 import 'package:tractian/core/infra/http/http_service.dart';
 import 'package:tractian/features/assets/data/datasources/assets_datasource.dart';
 
@@ -8,13 +9,21 @@ class AssetsDatasourceImp implements AssetsDataSource {
 
   @override
   Future<List<dynamic>> getAssets(String companyId) async {
-    final response = await _httpService.get("/companies/$companyId/assets");
-    return response.data;
+    try {
+      final response = await _httpService.get("/companies/$companyId/assets");
+      return response.data;
+    } catch (e) {
+      throw NetworkFailure(message: "Falha ao buscar os ativos");
+    }
   }
 
   @override
   Future<List<dynamic>> getLocations(String companyId) async {
-    final response = await _httpService.get("/companies/$companyId/locations");
-    return response.data;
+    try {
+      final response = await _httpService.get("/companies/$companyId/locations");
+      return response.data;
+    } catch (e) {
+      throw NetworkFailure(message: "Falha ao buscar os locais");
+    }
   }
 }
