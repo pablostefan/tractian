@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:tractian/core/error/base_failure.dart';
 import 'package:tractian/core/infra/http/http_service.dart';
 
 class DioHttpServiceImp implements HttpService {
@@ -11,6 +12,12 @@ class DioHttpServiceImp implements HttpService {
     String path, {
     Map<String, dynamic>? queryParameters,
   }) {
-    return _dio.get<T>(path, queryParameters: queryParameters);
+    try {
+      return _dio.get<T>(path, queryParameters: queryParameters);
+    } on DioException catch (e) {
+      throw NetworkFailure.fromDioException(e);
+    } catch (e, s) {
+      throw NetworkFailure(message: "Erro ao buscar dados", stackTrace: s);
+    }
   }
 }
