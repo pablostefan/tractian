@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:tractian/core/error/base_failure.dart';
 import 'package:tractian/core/infra/http/http_service.dart';
 import 'package:tractian/features/assets/data/datasources/assets_datasource.dart';
@@ -12,6 +13,8 @@ class AssetsRemoteDatasourceImp implements AssetsDataSource {
     try {
       final response = await _httpService.get("/companies/$companyId/assets");
       return response.data;
+    } on DioException catch (e) {
+      throw NetworkFailure.fromDioException(e);
     } catch (e, s) {
       throw NetworkFailure(message: "Não foi possível buscar os Assets", stackTrace: s);
     }
@@ -22,6 +25,8 @@ class AssetsRemoteDatasourceImp implements AssetsDataSource {
     try {
       final response = await _httpService.get("/companies/$companyId/locations");
       return response.data;
+    } on DioException catch (e) {
+      throw NetworkFailure.fromDioException(e);
     } catch (e, s) {
       throw NetworkFailure(message: "Não foi possível buscar as Localizações", stackTrace: s);
     }
